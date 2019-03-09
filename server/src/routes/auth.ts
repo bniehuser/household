@@ -3,7 +3,7 @@ import { getTokenFromLogin, ILoginCredentials } from '../util/jwt';
 
 const router = Router();
 
-router.post('/signin', async (req, res) => {
+export default router.post('/signin', async (req, res) => {
     const token = await getTokenFromLogin(req.body as ILoginCredentials);
 
     if (!token) {
@@ -12,5 +12,3 @@ router.post('/signin', async (req, res) => {
 
     res.send({ token });
 });
-
-module.exports = router;

@@ -1,6 +1,4 @@
-import db from "./db";
 import knex from "knex";
-
 import path from 'path';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -21,18 +19,23 @@ export default class App {
     private readonly _express: express.Express;
 
     constructor(config: IAppConfig) {
+
+        this._express = express();
+
         this._apollo = new ApolloServer({
             schema: createSchema(config.db),
             introspection: isDev,
             playground: isDev,
-            cors: false,
-            bodyParserConfig: false,
             engine: {
                 apiKey: APOLLO_ENGINE_KEY,
             },
         });
 
-        this._express = express();
+        this._apollo.applyMiddleware({
+            app: this._express,
+            cors: false,
+            bodyParserConfig: false,
+        });
 
         this._express.use(removeXPoweredBy());
 
