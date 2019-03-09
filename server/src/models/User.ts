@@ -1,6 +1,7 @@
-import BaseModel from './BaseModel';
+import BaseModel, { ApiQueryBuilder } from './BaseModel';
+import { QueryContext } from "objection";
 
-export default class User extends BaseModel {
+export class User extends BaseModel {
     static get jsonSchema() {
         return {
             type: 'object',
@@ -15,10 +16,10 @@ export default class User extends BaseModel {
         };
     }
 
-    static async modifyApiQuery(qb, { user }) {
-        console.log('modifyApiQuery', { user });
-        if (user) {
-            qb.where('id', user.id);
+    static async modifyApiQuery(qb: ApiQueryBuilder<User>, ctx: QueryContext) {
+        console.log('modifyApiQuery', ctx);
+        if (ctx.user) {
+            qb.where('id', ctx.user.id);
         } else {
             qb.whereRaw('1=2');
         }

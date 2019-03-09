@@ -34,7 +34,7 @@ export const getTokenFromLogin = async (login: ILoginCredentials) => {
         return null;
     }
 
-    const user = await User.query().findOne({ email: login.email });
+    const user = await User.query().findOne({ email: login.email }) as User;
     if (user) {
         const passIsOk = await bcrypt.compare(login.password, user.password);
         if (passIsOk) {

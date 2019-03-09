@@ -3,7 +3,7 @@ import { QueryResult } from "pg";
 
 // TODO: NEED A BETTER WAY TO DO THIS
 
-class ApiQueryBuilder<T extends BaseModel> extends QueryBuilder<T> {
+export class ApiQueryBuilder<T extends BaseModel> extends QueryBuilder<T> {
     constructor(modelClass: T) {
         super(modelClass);
         this.runBefore(async (result, qb) => {
