@@ -1,25 +1,34 @@
+require('dotenv').config();
+
+const {
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_DATABASE,
+} = process.env;
+
+const defaults = {
+    client: 'postgres',
+    connection: {
+        host: DB_HOST,
+        user: DB_USER,
+        password: DB_PASSWORD,
+        database: DB_DATABASE,
+    },
+};
+
 module.exports = {
+
     development: {
-        client: 'sqlite3',
+        ...defaults,
+        debug: true,
         useNullAsDefault: true,
-        connection: {
-            filename: './household.db'
-        },
-        pool: {
-            afterCreate: (conn, cb) => {
-                conn.run('PRAGMA foreign_keys = ON', cb);
-            }
-        }
     },
 
     production: {
-        client: 'postgresql',
-        connection: {
-            database: 'household'
-        },
-        pool: {
-            min: 2,
-            max: 10
-        }
-    }
+        ...defaults,
+        debug: false,
+        useNullAsDefault: true,
+    },
+
 };
