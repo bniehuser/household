@@ -1,8 +1,9 @@
 import { Model } from 'objection';
-import objectionGraphql from 'objection-graphql';
 import * as models from './models';
 import { createMutations } from './mutations';
 import knex from 'knex';
+// BAAH no typescript support
+const objectionGraphql = require('objection-graphql');
 
 export default function createSchema(db: knex) {
     Model.knex(db);
