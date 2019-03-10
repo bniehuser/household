@@ -2,6 +2,12 @@ import BaseModel, { ApiQueryBuilder } from './BaseModel';
 import { QueryContext } from "objection";
 
 export class User extends BaseModel {
+    readonly id!: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+
     static get jsonSchema() {
         return {
             type: 'object',
