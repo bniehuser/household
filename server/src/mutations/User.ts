@@ -101,7 +101,7 @@ const mutationType = new GraphQLObjectType({
                 const graph = await User.query().insertGraph({
                     ...input,
                     password: hash,
-                });
+                }) as any;
                 return graph.toJSON();
             },
         },

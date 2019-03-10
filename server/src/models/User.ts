@@ -31,16 +31,16 @@ export class User extends BaseModel {
         }
     }
 
-    static get relationMappings() {
-        return {
-            projects: {
-                relation: this.HasManyRelation,
-                modelClass: 'Project',
-                join: {
-                    from: 'User.id',
-                    to: 'Project.ownerId',
-                },
-            },
-        };
-    }
+    // static get relationMappings() {
+    //     return {
+    //         projects: {
+    //             relation: this.HasManyRelation,
+    //             modelClass: 'Project',
+    //             join: {
+    //                 from: 'User.id',
+    //                 to: 'Project.ownerId',
+    //             },
+    //         },
+    //     };
+    // }
 };
