@@ -22,7 +22,7 @@ export class User extends BaseModel {
         };
     }
 
-    static async modifyApiQuery(qb: ApiQueryBuilder<User>, ctx: QueryContext) {
+    static async modifyApiQuery(qb: ApiQueryBuilder<User>, ctx: QueryContext): Promise<void> {
         console.log('modifyApiQuery', ctx);
         if (ctx.user) {
             qb.where('id', ctx.user.id);

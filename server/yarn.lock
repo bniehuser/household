@@ -127,6 +127,14 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
+"@types/express-winston@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/express-winston/-/express-winston-3.0.1.tgz#f88c7b3a6c155897c1b82f74f8731408c9a3d0b6"
+  integrity sha512-GTQavOxuEmU0NzdRaFTu18iLWSihxLRHHeEnCSPNkF14QlwTl/Sat2Kly2T2FZB1WG3R/mfNmX5H0fobTzuu4g==
+  dependencies:
+    "@types/express" "*"
+    winston "^3.0.0"
+
 "@types/express@*", "@types/express@4.16.1", "@types/express@^4.16.1":
   version "4.16.1"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.1.tgz#d756bd1a85c34d87eaf44c888bad27ba8a4b7cf0"
@@ -1320,6 +1328,14 @@ express-promise-router@^3.0.3:
     is-promise "^2.1.0"
     lodash.flattendeep "^4.0.0"
     methods "^1.0.0"
+
+express-winston@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/express-winston/-/express-winston-3.1.0.tgz#dac9f935b7eb0f03495733eaa61afe0f7b4b5a9a"
+  integrity sha512-bVhg0vOqz5GvzukgNDK562rA/8rvKarlemu139mczUkHWOwj+LZ8Zvby6lLa2aGDiEDtRDCKdXqUlgPk+v9o1g==
+  dependencies:
+    chalk "^2.4.1"
+    lodash "^4.17.10"
 
 express@^4.16.4:
   version "4.16.4"
@@ -4180,7 +4196,7 @@ winston-transport@^4.3.0:
     readable-stream "^2.3.6"
     triple-beam "^1.2.0"
 
-winston@^3.2.1:
+winston@^3.0.0, winston@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/winston/-/winston-3.2.1.tgz#63061377976c73584028be2490a1846055f77f07"
   integrity sha512-zU6vgnS9dAWCEKg/QYigd6cgMVVNwyTzKs81XZtTFuRwJOcDdBg7AU0mXVyNbs7O5RH2zdv+BdNZUlx7mXPuOw==

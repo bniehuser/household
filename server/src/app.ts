@@ -7,6 +7,7 @@ import { json } from 'body-parser';
 import { removeXPoweredBy, withAuth } from './middleware';
 import createSchema from './schema';
 import authRoutes from './routes/auth';
+import { postRouteLogging, preRouteLogging } from "./logging";
 
 const { NODE_ENV, APOLLO_ENGINE_KEY } = process.env;
 
@@ -39,6 +40,8 @@ export default class App {
 
         this._express.use(express.static(path.resolve(__dirname, '../static')));
 
+        this._express.use(preRouteLogging);
+
         this._express.use(authRoutes);
 
         this._express.use(this._apollo.graphqlPath, withAuth(this._apollo));
@@ -48,6 +51,8 @@ export default class App {
             cors: false,
             bodyParserConfig: false,
         });
+
+        this._express.use(postRouteLogging);
     }
     get express(): express.Express {
         return this._express;

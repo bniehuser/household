@@ -1,6 +1,14 @@
-node_modules
+### external
 .idea
-yarn-error.log
+/server/node_modules/
+/client/node_modules/
+
+### secrets
+/server/.env
+/server/*.key
+
+### compiled
+/server/lib/
+
+### logs
 *.log
-dist
-.env

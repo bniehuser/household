@@ -7,7 +7,6 @@ export class ApiQueryBuilder<T extends BaseModel> extends QueryBuilder<T> {
     constructor(modelClass: any) {
         // @ts-ignore
         super(modelClass); // i don't think this is necessary?  unless we were subclassing this class
-        // super();
         this.runBefore(async (result, qb) => {
             const context = qb.context();
             if (!context.isApiQuery) return;
@@ -21,7 +20,7 @@ export class ApiQueryBuilder<T extends BaseModel> extends QueryBuilder<T> {
     }
 }
 
-export default class BaseModel extends Model {
+export default abstract class BaseModel extends Model {
     // Objection Model Configs
     static get modelPaths() {
         return [__dirname];
@@ -31,10 +30,10 @@ export default class BaseModel extends Model {
     }
 
     // tslint-disable-next-line
-    static async modifyApiQuery(qb: ApiQueryBuilder<any>, context: QueryContext) {}
+    static async modifyApiQuery(qb: ApiQueryBuilder<any>, context: QueryContext): Promise<void> {};
 
     // eslint-disable-next-line no-unused-vars
-    static async modifyApiResults(result: QueryResult, context: QueryContext, qb: ApiQueryBuilder<any>) {
+    static async modifyApiResults(result: any, context: QueryContext, qb: ApiQueryBuilder<any>): Promise<any> {
         return result;
     }
 
