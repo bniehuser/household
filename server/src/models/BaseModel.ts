@@ -5,8 +5,9 @@ import { QueryResult } from "pg";
 
 export class ApiQueryBuilder<T extends BaseModel> extends QueryBuilder<T> {
     constructor(modelClass: any) {
-        // super(modelClass); // i don't think this is necessary?  unless we were subclassing this class
-        super();
+        // @ts-ignore
+        super(modelClass); // i don't think this is necessary?  unless we were subclassing this class
+        // super();
         this.runBefore(async (result, qb) => {
             const context = qb.context();
             if (!context.isApiQuery) return;

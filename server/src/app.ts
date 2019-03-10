@@ -31,12 +31,6 @@ export default class App {
             },
         });
 
-        this._apollo.applyMiddleware({
-            app: this._express,
-            cors: false,
-            bodyParserConfig: false,
-        });
-
         this._express.use(removeXPoweredBy());
 
         this._express.use(cors());
@@ -49,7 +43,11 @@ export default class App {
 
         this._express.use(this._apollo.graphqlPath, withAuth(this._apollo));
 
-        this._apollo.applyMiddleware({ app: this._express });
+        this._apollo.applyMiddleware({
+            app: this._express,
+            cors: false,
+            bodyParserConfig: false,
+        });
     }
     get express(): express.Express {
         return this._express;

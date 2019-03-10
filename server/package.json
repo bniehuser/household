@@ -28,7 +28,9 @@
     "@types/pg": "^7.4.13",
     "axios": "^0.18.0",
     "chai": "^4.2.0",
+    "concurrently": "^4.1.0",
     "mocha": "^6.0.2",
+    "nodemon": "^1.18.10",
     "rimraf": "^2.6.3",
     "sqlite3": "^4.0.6",
     "typescript": "^3.3.3333"
@@ -38,7 +40,8 @@
   "description": "household management software server",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "serve-dev": "concurrently --kill-others \"tsc -w\" \"nodemon dist/server.js\""
   },
   "author": "Barry Niehuser <https://github.com/bniehuser>",
   "license": "ISC"
