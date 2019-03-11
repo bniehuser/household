@@ -1,4 +1,6 @@
 require('dotenv').config();
+const { knexSnakeCaseMappers } = require("objection");
+const { snakeCase } = require("lodash");
 
 const {
     DB_HOST,
@@ -15,6 +17,7 @@ const defaults = {
         password: DB_PASSWORD,
         database: DB_DATABASE,
     },
+    ...knexSnakeCaseMappers(),
 };
 
 module.exports = {
@@ -30,5 +33,15 @@ module.exports = {
         debug: false,
         useNullAsDefault: true,
     },
+
+    onUpdateTrigger: table => `
+        CREATE TRIGGER ${snakeCase(table)}_updated_at
+        BEFORE UPDATE ON "${snakeCase(table)}"
+        FOR EACH ROW
+        EXECUTE PROCEDURE on_update_timestamp();
+    `,
+    dropUpdateTrigger: table => `
+        DROP TRIGGER ${snakeCase(table)}_updated_at ON "${snakeCase(table)}";
+    `
 
 };

@@ -22,6 +22,8 @@ export class User extends BaseModel {
         };
     }
 
+    get fullName() { return `${this.firstName} ${this.lastName}`; }
+
     static async modifyApiQuery(qb: ApiQueryBuilder<User>, ctx: QueryContext): Promise<void> {
         console.log('modifyApiQuery', ctx);
         if (ctx.user) {
