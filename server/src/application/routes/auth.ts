@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTokenFromLogin, ILoginCredentials } from '../util/jwt';
+import { getTokenFromLogin, ILoginCredentials } from '../../services/jwt';
 
 const router = Router();
 

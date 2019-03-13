@@ -3,7 +3,7 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import trim from 'lodash/trim';
-import { User } from '../models';
+import { User } from '../models/index';
 import { Request } from "express";
 
 const jwtSignOptions: SignOptions = {

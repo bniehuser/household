@@ -1,7 +1,8 @@
 import mutationType from './User';
+import { GraphQLObjectType } from "graphql";
 
 interface IMutationList {
-    [modelName: string]: any;
+    [modelName: string]: GraphQLObjectType;
 }
 const mutations: IMutationList = {
     User: mutationType,

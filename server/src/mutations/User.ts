@@ -6,7 +6,7 @@ import {
 import { AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models';
-import { getTokenFromLogin } from '../util/jwt';
+import { getTokenFromLogin } from '../services/jwt';
 
 const userType = new GraphQLObjectType({
     name: 'userType',

@@ -1,5 +1,5 @@
 import { ApolloServer, ForbiddenError } from 'apollo-server-express';
-import { getUserFromRequest } from '../util/jwt';
+import { getUserFromRequest } from '../services/jwt';
 import { Request, Response, NextFunction } from "express";
 import { QueryBuilder } from "objection";
 

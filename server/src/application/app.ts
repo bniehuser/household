@@ -4,10 +4,10 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import { json } from 'body-parser';
-import { removeXPoweredBy, withAuth } from './middleware';
-import createSchema from './schema';
+import { removeXPoweredBy, withAuth } from '../middleware/index';
+import createSchema from '../schema';
 import authRoutes from './routes/auth';
-import { postRouteLogging, preRouteLogging } from "./logging";
+import { postRouteLogging, preRouteLogging } from "../services/logging";
 
 const { NODE_ENV, APOLLO_ENGINE_KEY } = process.env;
 
