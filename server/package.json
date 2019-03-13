@@ -15,6 +15,8 @@
     "objection": "^1.6.3",
     "objection-graphql": "^0.4.4",
     "pg": "^7.8.2",
+    "type-graphql": "^0.17.0",
+    "typeorm": "^0.2.15-rc.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
