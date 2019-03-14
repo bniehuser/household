@@ -19,18 +19,18 @@ export default class App {
     private readonly _apollo: ApolloServer;
     private readonly _express: express.Express;
 
-    constructor(config: IAppConfig) {
+    constructor(config?: IAppConfig) {
 
         this._express = express();
 
-        this._apollo = new ApolloServer({
-            schema: createSchema(config.db),
-            introspection: isDev,
-            playground: isDev,
-            engine: {
-                apiKey: APOLLO_ENGINE_KEY,
-            },
-        });
+        // this._apollo = new ApolloServer({
+        //     schema: createSchema(config.db),
+        //     introspection: isDev,
+        //     playground: isDev,
+        //     engine: {
+        //         apiKey: APOLLO_ENGINE_KEY,
+        //     },
+        // });
 
         this._express.use(removeXPoweredBy());
 
@@ -44,13 +44,13 @@ export default class App {
 
         this._express.use(authRoutes);
 
-        this._express.use(this._apollo.graphqlPath, withAuth(this._apollo));
-
-        this._apollo.applyMiddleware({
-            app: this._express,
-            cors: false,
-            bodyParserConfig: false,
-        });
+        // this._express.use(this._apollo.graphqlPath, withAuth(this._apollo));
+        //
+        // this._apollo.applyMiddleware({
+        //     app: this._express,
+        //     cors: false,
+        //     bodyParserConfig: false,
+        // });
 
         this._express.use(postRouteLogging);
     }

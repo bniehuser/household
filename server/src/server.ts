@@ -1,7 +1,6 @@
-import db from './services/db';
 import App from './application/app';
 
-const app = new App({ db });
+const app = new App();
 const port = process.env.PORT || 4000;
 const host = process.env.HOSTNAME || '0.0.0.0';
 
@@ -14,10 +13,11 @@ interface IExitOptions {
     cleanup: boolean;
     exit: boolean;
 }
+
 // Shutdown Node.js app gracefully
 function handleExit(options: IExitOptions, err: any) {
     if (options.cleanup) {
-        const actions = [server.close, db.destroy];
+        const actions = [server.close];
         actions.forEach((close, i) => {
             try {
                 close(() => {
