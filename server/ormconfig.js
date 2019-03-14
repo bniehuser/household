@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { SnakeNamingStrategy } = require('./tools/typeorm-config');
+const { SnakeNamingStrategy } = require('./util/typeorm-config');
 
 // get env vars
 const {
