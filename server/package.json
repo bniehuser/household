@@ -37,6 +37,7 @@
     "nodemon": "^1.18.10",
     "rimraf": "^2.6.3",
     "sqlite3": "^4.0.6",
+    "ts-node": "^8.0.3",
     "typescript": "^3.3.3333"
   },
   "name": "household-server",
@@ -46,7 +47,12 @@
   "scripts": {
     "test": "mocha",
     "serve-dev": "concurrently --kill-others \"tsc -w\" \"nodemon lib/server.js\"",
-    "ts-typeorm": "ts-node ./node_modules/typeorm/cli.js"
+    "typeorm": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js",
+    "migration:create": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:create",
+    "migration:generate": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate",
+    "migration:revert": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:revert",
+    "migration:run": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:run",
+    "schema:sync": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js schema:sync"
   },
   "author": "Barry Niehuser <https://github.com/bniehuser>",
   "license": "ISC"
