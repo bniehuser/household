@@ -1,8 +1,10 @@
-import { Column, Timestamp } from "typeorm";
+import { ManyToOne } from "typeorm";
+import { Member } from '../../Member';
 
 export class Editor {
-    @Column(type=>Member)
+    @ManyToOne(() => Member)
     createdBy: Member;
-    @Column(type=>Member)
+
+    @ManyToOne(() => Member)
     editedBy: Member;
 }

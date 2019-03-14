@@ -1,8 +1,12 @@
 import { BaseModel } from "./BaseModel";
-import { Timestamps } from "./fields/Timestamps";
-import { Column } from "typeorm";
+import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export abstract class TimedModel extends BaseModel {
-    @Column(type=>Timestamps)
-    time: Timestamps;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
 }

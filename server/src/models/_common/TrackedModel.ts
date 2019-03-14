@@ -1,8 +1,18 @@
-import { Column } from "typeorm";
+import { Column, ManyToOne } from "typeorm";
 import { TimedModel } from "./TimedModel";
-import { Editor } from "./fields/Editor";
+import { Member } from '../Member';
 
 export abstract class TrackedModel extends TimedModel {
-    @Column(type=>Editor)
-    editor: Editor;
+    @ManyToOne(() => Member)
+    createdBy: Member;
+
+    @Column({ nullable: true })
+    createdById: number;
+
+    @ManyToOne(() => Member)
+    editedBy: Member;
+
+    @Column({ nullable: true })
+    editedById: number;
+
 }

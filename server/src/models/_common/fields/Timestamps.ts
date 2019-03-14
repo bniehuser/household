@@ -1,8 +1,11 @@
-import { Column, Timestamp } from "typeorm";
+import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export class Timestamps {
-    @Column(type=>Timestamp)
+
+    @CreateDateColumn()
     createdAt: Date;
-    @Column(type=>Timestamp)
+
+    @UpdateDateColumn()
     updatedAt: Date;
+
 }

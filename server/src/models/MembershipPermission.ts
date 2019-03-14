@@ -1,12 +1,12 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { TrackedModel } from './_common/TrackedModel';
+import { HouseholdMembership } from './HouseholdMembership';
 import { Permission } from './Permission';
-import { Role } from './Role';
 
 @Entity()
-export class RolePermission extends TrackedModel {
-    @ManyToOne(() => Role, role => role.permissions)
-    role: Role;
+export class MembershipPermission extends TrackedModel {
+    @ManyToOne(() => HouseholdMembership, membership => membership.membershipPermissions)
+    membership: HouseholdMembership;
 
     @ManyToOne(() => Permission)
     permission: Permission;

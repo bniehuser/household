@@ -3,6 +3,7 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es6",
     "noImplicitAny": true,
     "moduleResolution": "node",

@@ -45,7 +45,8 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "mocha",
-    "serve-dev": "concurrently --kill-others \"tsc -w\" \"nodemon lib/server.js\""
+    "serve-dev": "concurrently --kill-others \"tsc -w\" \"nodemon lib/server.js\"",
+    "ts-typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "author": "Barry Niehuser <https://github.com/bniehuser>",
   "license": "ISC"

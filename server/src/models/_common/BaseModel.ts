@@ -1,6 +1,8 @@
-import { Entity } from "typeorm";
+import { PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
 export abstract class BaseModel {
+
+    @PrimaryGeneratedColumn()
+    id: number;
 
 }
