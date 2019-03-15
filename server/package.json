@@ -11,6 +11,7 @@
     "jsonwebtoken": "^8.5.0",
     "knex": "^0.16.3",
     "lodash": "^4.17.11",
+    "module-alias": "^2.2.0",
     "morgan": "^1.9.1",
     "objection": "^1.6.3",
     "objection-graphql": "^0.4.4",
@@ -55,5 +56,8 @@
     "schema:sync": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js schema:sync"
   },
   "author": "Barry Niehuser <https://github.com/bniehuser>",
-  "license": "ISC"
+  "license": "ISC",
+  "_moduleAliases": {
+    "@common"      : "../_common"
+  }
 }
