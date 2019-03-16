@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+const { Icon } = require('expo');
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+// import Colors from "../constants/Colors";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -32,14 +34,33 @@ export default class HomeScreen extends React.Component {
             />
           </View>
 
+            <View style={{display:'flex', flexDirection:'row'}}>
+                <View style={{flex:.5, textAlign: 'right'}}>
+                    <Icon.Ionicons
+                        name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+                        size={26}
+                        style={[{ marginBottom: -3 }, styles.house]}
+                    />
+                    <Text style={[styles.getStartedText, styles.house]}>House</Text>
+                </View>
+                <View style={{flex:.5, textAlign: 'left'}}>
+                    <Icon.Ionicons
+                        name={Platform.OS === 'ios' ? 'ios-hand' : 'md-hand'}
+                        size={26}
+                        style={[{ marginBottom: -3 }, styles.hold]}
+                    />
+                    <Text style={[styles.getStartedText, styles.hold]}>Hold</Text>
+                </View>
+            </View>
+
+
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
-            <Text style={styles.getStartedText}>🏠✊</Text>
+              <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+                  <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
+              </View>
 
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
 
             <Text style={styles.getStartedText}>
               Change this text and your app will automatically reload.
@@ -113,6 +134,14 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
+    house: {
+    color: '#70D1FE',
+        textAlign: 'right',
+    },
+    hold: {
+        color: '#FED90F',
+        textAlign: 'left',
+    },
   welcomeContainer: {
     alignItems: 'center',
     marginTop: 10,
