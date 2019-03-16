@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollView, StyleSheet, TextComponent } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+const { ExpoLinksView } = require('@expo/samples');
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -9,7 +10,8 @@ export default class LinksScreen extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-          <TextComponent>This is some Text on the Links page</TextComponent>
+          <Text>This is some Text on the Links page</Text>
+        <ExpoLinksView/>
       </ScrollView>
     );
   }
