@@ -10,3 +10,9 @@ export class MonoText extends React.Component<IProps> {
     return <Text {...this.props} style={[this.props.style, { fontFamily: 'space-mono' }]} />;
   }
 }
+
+export class HHText extends React.Component<IProps> {
+    render() {
+        return <Text {...this.props} style={[this.props.style, { fontFamily: 'space-mono' }]} />;
+    }
+}

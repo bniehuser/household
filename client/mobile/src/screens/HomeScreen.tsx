@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  Image,
+  // Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  // TouchableOpacity,
   View,
 } from 'react-native';
 const { Icon } = require('expo');
-import { WebBrowser } from 'expo';
-
-import { MonoText } from '../components/StyledText';
+// import { WebBrowser } from 'expo';
+//
+// import { MonoText } from '../components/StyledText';
 // import Colors from "../constants/Colors";
 
 export default class HomeScreen extends React.Component {
@@ -22,26 +22,15 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../../assets/images/robot-dev.png')
-                  : require('../../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
 
-            <View style={{display:'flex', flexDirection:'row'}}>
+            <View style={{display:'flex', flexDirection:'row', color: '#ddd', marginTop:20, padding:10}}>
                 <View style={{flex:.5, textAlign: 'right'}}>
                     <Icon.Ionicons
                         name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
                         size={26}
                         style={[{ marginBottom: -3 }, styles.house]}
                     />
-                    <Text style={[styles.getStartedText, styles.house]}>House</Text>
+                    <Text style={[styles.getStartedText, styles.house, { fontFamily: 'montserrat-bold', fontSize: 21 }]}>house</Text>
                 </View>
                 <View style={{flex:.5, textAlign: 'left'}}>
                     <Icon.Ionicons
@@ -49,80 +38,29 @@ export default class HomeScreen extends React.Component {
                         size={26}
                         style={[{ marginBottom: -3 }, styles.hold]}
                     />
-                    <Text style={[styles.getStartedText, styles.hold]}>Hold</Text>
+                    <Text style={[styles.getStartedText, styles.hold, { fontFamily: 'montserrat-bold', fontSize: 21 }]}>hold</Text>
                 </View>
+            </View>
+          <ScrollView style={[styles.container, {borderRadius:15, backgroundColor:'#dddddd'}]} contentContainerStyle={styles.contentContainer}>
+
+            <View style={{padding:10}}>
+          <Text>This is some content on the home screen, maybe?</Text>
             </View>
 
 
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-              <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-                  <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-              </View>
-
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
 
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
+      color: '#ddd',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -132,7 +70,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 30,
   },
     house: {
     color: '#70D1FE',

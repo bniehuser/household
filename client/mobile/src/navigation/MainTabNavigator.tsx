@@ -27,7 +27,7 @@ HomeStack.navigationOptions = {
           : 'md-information-circle'
       }
     />
-  ),
+  )
 };
 
 const LinksStack = createStackNavigator({
@@ -62,4 +62,6 @@ export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
+}, {
+  tabBarOptions: { style: { backgroundColor: '#000' }}
 });
