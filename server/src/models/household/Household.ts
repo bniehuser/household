@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { TrackedModel } from './_common/TrackedModel';
+import { TrackedModel } from '../_common/TrackedModel';
 import { HouseholdMembership } from './HouseholdMembership';
 import { Field, ObjectType } from "type-graphql/dist";
 

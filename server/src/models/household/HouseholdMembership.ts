@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Household } from './Household';
 import { Member } from './Member';
 import { Role } from './Role';
-import { BaseModel } from './_common/BaseModel';
+import { BaseModel } from '../_common/BaseModel';
 import { MembershipPermission } from './MembershipPermission';
 import { Field, ObjectType } from "type-graphql/dist";
 
@@ -35,6 +35,10 @@ export class HouseholdMembership extends BaseModel {
     @ManyToOne(() => Role, { eager: true })
     @Field(() => Role)
     role: Role;
+
+    @Column()
+    @Field()
+    roleId: number;
 
     @OneToMany(() => MembershipPermission, membershipPermission => membershipPermission.membership, { eager: true })
     membershipPermissions: MembershipPermission[];

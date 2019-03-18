@@ -1,9 +1,7 @@
-import { Household } from "../models/Household";
 import { FieldResolver, Query, Resolver, Root } from "type-graphql/dist";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
-import { HouseholdMembership } from "../models/HouseholdMembership";
-import { Member } from "../models/Member";
+import { Household, HouseholdMembership, Member } from "../../models/household";
 
 @Resolver(() => Household)
 export class HouseholdResolver {

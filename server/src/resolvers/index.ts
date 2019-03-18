@@ -1,9 +1,5 @@
-import { HouseholdMembershipResolver} from "./HouseholdMembership.resolver";
-import { MemberResolver} from "./Member.resolver";
-import { HouseholdResolver } from "./Household.resolver";
+import HouseholdResolvers from "./household";
 
 export default [
-    HouseholdResolver,
-    HouseholdMembershipResolver,
-    MemberResolver,
+    ...HouseholdResolvers,
 ];

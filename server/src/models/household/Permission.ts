@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { TimedModel } from './_common/TimedModel';
+import { TimedModel } from '../_common/TimedModel';
 
 @Entity()
 export class Permission extends TimedModel {

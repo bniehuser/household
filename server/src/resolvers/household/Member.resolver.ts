@@ -1,8 +1,7 @@
-import { Member } from "../models/Member";
+import { HouseholdMembership, Member } from "../../models/household";
 import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql/dist";
-import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
-import { HouseholdMembership } from "../models/HouseholdMembership";
+import { InjectRepository } from "typeorm-typedi-extensions";
 import { Context } from "vm";
 import { MemberInput } from "./types/input/MemberInput";
 import bcrypt from 'bcryptjs';
@@ -45,6 +44,7 @@ export class MemberResolver {
     async addHouseholdMember(
         @Arg("member") memberInput: MemberInput,
         @Arg("householdId") householdId: number,
+        @Arg("roleId") roleId: number,
         @Ctx() { member }: Context,
     ): Promise<HouseholdMembership> {
         let addMember = await this.memberRepository.findOne({email: memberInput.email});
@@ -55,11 +55,19 @@ export class MemberResolver {
                 createdBy: member,
             });
             addMember = await this.memberRepository.save(addMember);
+        } else {
+            await this.memberRepository.update(addMember.id, memberInput);
         }
-        const newMembership = await this.membershipRepository.create({
-            member: addMember,
-            householdId,
-        });
+        let newMembership = await this.membershipRepository.findOne({member: addMember, householdId});
+        if(newMembership === undefined) {
+            newMembership = await this.membershipRepository.create({
+                member: addMember,
+                householdId,
+                roleId,
+            });
+        } else {
+            newMembership.roleId = roleId;
+        }
         return await this.membershipRepository.save(newMembership);
     }
 

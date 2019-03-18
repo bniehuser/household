@@ -1,4 +1,4 @@
-import { TrackedModel } from "./_common/TrackedModel";
+import { TrackedModel } from "../_common/TrackedModel";
 import { Column, Entity, OneToMany } from "typeorm";
 import { HouseholdMembership } from './HouseholdMembership';
 import { Field, ObjectType } from "type-graphql/dist";
@@ -29,5 +29,11 @@ export class Member extends TrackedModel {
     @OneToMany(() => HouseholdMembership, membership => membership.member)
     @Field(() => [HouseholdMembership])
     memberships: HouseholdMembership[];
+
+    // accessors
+    @Field()
+    get fullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
 
 }

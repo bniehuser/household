@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { TrackedModel } from './_common/TrackedModel';
+import { TrackedModel } from '../_common/TrackedModel';
 import { Permission } from './Permission';
 import { Role } from './Role';
 import { PermissionType } from "@common/types/permission";

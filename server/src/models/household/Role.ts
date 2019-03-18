@@ -1,4 +1,4 @@
-import { TrackedModel } from './_common/TrackedModel';
+import { TrackedModel } from '../_common/TrackedModel';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { RolePermission } from './RolePermission';
 import { Field, ObjectType } from "type-graphql/dist";

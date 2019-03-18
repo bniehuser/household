@@ -5,7 +5,7 @@ import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import trim from 'lodash/trim';
 import { Request } from "express";
 import { getRepository } from 'typeorm';
-import { Member } from "../models/Member";
+import { Member } from "../models/household/Member";
 
 
 const jwtSignOptions: SignOptions = {

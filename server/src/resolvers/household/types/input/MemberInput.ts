@@ -1,5 +1,5 @@
 import { Field, InputType } from "type-graphql/dist";
-import { Member } from "../../../models/Member";
+import { Member } from "../../../../models/household/Member";
 
 @InputType()
 export class MemberInput implements Partial<Member> {

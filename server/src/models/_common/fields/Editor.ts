@@ -1,5 +1,5 @@
 import { ManyToOne } from "typeorm";
-import { Member } from '../../Member';
+import { Member } from '../../household/Member';
 
 export class Editor {
     @ManyToOne(() => Member)
