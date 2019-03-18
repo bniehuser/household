@@ -1,6 +1,6 @@
 import React from 'react';
 // seriously?  have to fake Icon in Expo for Typescript
-const { Icon } = require('expo');
+import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 interface IProps {
@@ -11,10 +11,10 @@ interface IProps {
 export default class TabBarIcon extends React.Component<IProps> {
   render() {
     return (
-      <Icon.Ionicons
+      <FontAwesome
         name={this.props.name}
-        size={26}
-        style={{ marginBottom: -3 }}
+        size={24}
+        style={{ marginBottom: -2 }}
         color={this.props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
       />
     );

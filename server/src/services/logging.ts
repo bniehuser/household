@@ -11,6 +11,8 @@ const consoleLogger = winston.createLogger({
     )
 });
 
+export const logger = consoleLogger;
+
 export const preRouteLogging = expressWinston.logger({ winstonInstance: consoleLogger });
 
 export const postRouteLogging = expressWinston.errorLogger({ winstonInstance: consoleLogger });

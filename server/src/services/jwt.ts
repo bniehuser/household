@@ -3,8 +3,10 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import trim from 'lodash/trim';
-import { User } from '../models/index';
 import { Request } from "express";
+import { getRepository } from 'typeorm';
+import { Member } from "../models/Member";
+
 
 const jwtSignOptions: SignOptions = {
     expiresIn: '12h',
@@ -33,12 +35,13 @@ export const getTokenFromLogin = async (login: ILoginCredentials) => {
     if (!trim(login.email) || !trim(login.password)) {
         return null;
     }
+    const memberRepository = getRepository(Member);
 
-    const user = await User.query().findOne({ email: login.email }) as User;
-    if (user) {
-        const passIsOk = await bcrypt.compare(login.password, user.password);
+    const member = await memberRepository.findOne({ email: login.email }) as Member;
+    if (member) {
+        const passIsOk = await bcrypt.compare(login.password, member.password);
         if (passIsOk) {
-            return sign({ id: user.id }, getPrivateKey(), jwtSignOptions);
+            return sign({ id: member.id }, getPrivateKey(), jwtSignOptions);
         }
     }
 

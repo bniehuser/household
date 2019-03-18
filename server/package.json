@@ -17,7 +17,9 @@
     "objection-graphql": "^0.4.4",
     "pg": "^7.8.2",
     "type-graphql": "^0.17.0",
+    "typedi": "^0.8.0",
     "typeorm": "^0.2.15-rc.2",
+    "typeorm-typedi-extensions": "^0.2.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -39,6 +41,7 @@
     "rimraf": "^2.6.3",
     "sqlite3": "^4.0.6",
     "ts-node": "^8.0.3",
+    "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.3.3333"
   },
   "name": "household-server",
@@ -47,7 +50,7 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "mocha",
-    "serve-dev": "concurrently --kill-others \"tsc -w\" \"nodemon lib/server.js\"",
+    "serve-dev": "./node_modules/.bin/ts-node-dev src/server.ts\"",
     "typeorm": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js",
     "migration:create": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:create",
     "migration:generate": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate",
@@ -58,6 +61,6 @@
   "author": "Barry Niehuser <https://github.com/bniehuser>",
   "license": "ISC",
   "_moduleAliases": {
-    "@common"      : "../_common"
+    "@common": "../_common"
   }
 }

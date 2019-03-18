@@ -1,13 +1,30 @@
 import App from './application/app';
+import { Server } from "http";
+import { createConnection, useContainer } from "typeorm";
+import { Container } from "typedi";
+import { logger } from "./services/logging";
 
 const app = new App();
 const port = process.env.PORT || 4000;
 const host = process.env.HOSTNAME || '0.0.0.0';
+let server: Server;
+
+useContainer(Container);
 
 // Launch Node.js server
-const server = app.express.listen({ port, host }, () => {
-    console.log(`🚀 Server ready at http://${host}:${port}/`);
-});
+async function bootstrap() {
+    try {
+        await createConnection();
+    } catch (e) {
+//        const f: Error = e as Error;
+        logger.error(`${e.stack}, ${e.toString()}`);
+    }
+    await app.init();
+    server = app.express.listen({ port, host }, () => {
+        console.log(`🚀 Server ready at http://${host}:${port}/`);
+    });
+}
+bootstrap();
 
 interface IExitOptions {
     cleanup: boolean;

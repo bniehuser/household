@@ -9,7 +9,7 @@ export class RolePermission extends TrackedModel {
     @ManyToOne(() => Role, role => role.permissions)
     role: Role;
 
-    @ManyToOne(() => Permission)
+    @ManyToOne(() => Permission, { eager: true })
     permission: Permission;
 
     @Column('integer')

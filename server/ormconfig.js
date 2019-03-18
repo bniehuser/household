@@ -25,6 +25,9 @@ module.exports = {
   entities: [
     "src/models/**/*.ts"
   ],
+  repositories: [
+    "src/repositories/**/*.ts"
+  ],
   migrations: [
     "migrations/**/*.ts"
   ],

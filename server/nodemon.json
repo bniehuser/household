@@ -1,7 +1,6 @@
 {
   "watch": [
     "lib/",
-    "knexfile.js",
     ".env"
   ],
   "env": {
