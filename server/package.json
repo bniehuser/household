@@ -50,7 +50,7 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "mocha",
-    "serve-dev": "./node_modules/.bin/ts-node-dev src/server.ts\"",
+    "serve-dev": "./node_modules/.bin/ts-node-dev src/server.ts",
     "typeorm": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js",
     "migration:create": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:create",
     "migration:generate": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate",

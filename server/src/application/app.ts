@@ -1,14 +1,16 @@
 import path from 'path';
-import express from 'express';
+import express, { Request } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import { json } from 'body-parser';
-import { removeXPoweredBy, withAuth } from '../middleware/index';
+import { removeXPoweredBy } from '../middleware/index';
 import authRoutes from './routes/auth';
 import { postRouteLogging, preRouteLogging } from "../services/logging";
 import { buildSchema } from "type-graphql";
 import AllResolvers from "../resolvers";
 import { Container } from "typedi";
+import { getContextFromRequest } from '../services/jwt';
+import { AuthService } from '../services';
 
 const { NODE_ENV, APOLLO_ENGINE_KEY } = process.env;
 
@@ -23,7 +25,11 @@ export default class App {
 
         this._express = express();
 
-        const schema = await buildSchema({resolvers: AllResolvers, container: Container,});
+        const schema = await buildSchema({
+            resolvers: AllResolvers,
+            container: Container,
+            authChecker: AuthService.authChecker,
+        });
 
         this._apollo = new ApolloServer({
             schema,
@@ -32,6 +38,7 @@ export default class App {
             engine: {
                 apiKey: APOLLO_ENGINE_KEY,
             },
+            context: getContextFromRequest,
         });
 
         this._express.use(removeXPoweredBy());
@@ -45,8 +52,6 @@ export default class App {
         this._express.use(preRouteLogging);
 
         this._express.use(authRoutes);
-
-        // this._express.use(this._apollo.graphqlPath, withAuth(this._apollo));
 
         this._apollo.applyMiddleware({
             app: this._express,

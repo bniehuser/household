@@ -16,7 +16,6 @@ async function bootstrap() {
     try {
         await createConnection();
     } catch (e) {
-//        const f: Error = e as Error;
         logger.error(`${e.stack}, ${e.toString()}`);
     }
     await app.init();

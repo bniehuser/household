@@ -5,8 +5,11 @@ import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import trim from 'lodash/trim';
 import { Request } from "express";
 import { getRepository } from 'typeorm';
-import { Member } from "../models/household/Member";
+import { Household, Member } from "../models/household";
+import { IContext } from '../application/types/context';
+import { logger } from './logging';
 
+// TODO: this whole service is a mess.  should be concerned only with the actual trappings of JWT, leave app stuff out
 
 const jwtSignOptions: SignOptions = {
     expiresIn: '12h',
@@ -27,9 +30,11 @@ const getPublicKey = () => (
 export interface ILoginCredentials {
     email: string;
     password: string;
+    householdId?: number;
 }
 export interface IApiToken {
-    id: string;
+    memberId: number;
+    householdId?: number;
 }
 export const getTokenFromLogin = async (login: ILoginCredentials) => {
     if (!trim(login.email) || !trim(login.password)) {
@@ -37,18 +42,20 @@ export const getTokenFromLogin = async (login: ILoginCredentials) => {
     }
     const memberRepository = getRepository(Member);
 
+    // TODO: need to check that member can appropriately access household; no login if not related
+
     const member = await memberRepository.findOne({ email: login.email }) as Member;
     if (member) {
         const passIsOk = await bcrypt.compare(login.password, member.password);
         if (passIsOk) {
-            return sign({ id: member.id }, getPrivateKey(), jwtSignOptions);
+            return sign({ memberId: member.id, householdId: login.householdId }, getPrivateKey(), jwtSignOptions);
         }
     }
 
     return null;
 };
 
-export const getUserFromRequest = async (req: Request) => {
+export const getContextFromRequest = async (req: Request): Promise<IContext> => {
     if (!req.headers.authorization) {
         return null;
     }
@@ -61,11 +68,12 @@ export const getUserFromRequest = async (req: Request) => {
 
     const token = headerMatch[1];
 
-    let verified: IApiToken|boolean = false;
+    let verified: IApiToken;
     try {
         verified = verify(token, getPublicKey(), jwtVerifyOptions) as IApiToken;
     } catch (e) {
-        verified = false;
+        logger.error(e.toString(), e);
+        return null;
     }
 
     if (!verified) {
@@ -73,10 +81,19 @@ export const getUserFromRequest = async (req: Request) => {
     }
 
     // TODO: get user from db and check all good
+    const memberRepository = getRepository(Member);
+    const member = await memberRepository.findOne(verified.memberId);
 
-    console.log('getUserFromRequest', { verified });
+    let household: Household;
+    if(verified.householdId) {
+        const householdRepository = getRepository(Household);
+        household = await householdRepository.findOne(verified.householdId)
+    }
+
+    logger.info('getContextFromRequest', { verified });
 
     return {
-        id: verified.id,
+        member,
+        household,
     };
 };
