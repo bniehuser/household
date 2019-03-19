@@ -1,6 +1,6 @@
 import { Column, ManyToOne } from "typeorm";
 import { TimedModel } from "./TimedModel";
-import { Member } from '../household/Member';
+import { Member } from '../household';
 import { Field, ID } from "type-graphql/dist";
 
 export abstract class TrackedModel extends TimedModel {

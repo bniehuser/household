@@ -2,8 +2,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { TrackedModel } from '../_common/TrackedModel';
 import { HouseholdMembership } from './HouseholdMembership';
 import { Permission } from './Permission';
-import { PermissionType } from "@common/types/permission";
-import { ObjectType } from "type-graphql/dist";
+import { PermissionType } from "../../../../@common/types/permission";
 
 @Entity()
 export class MembershipPermission extends TrackedModel {

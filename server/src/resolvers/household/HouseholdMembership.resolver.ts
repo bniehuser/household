@@ -1,7 +1,7 @@
-import { Arg, FieldResolver, Mutation, Resolver, Root } from "type-graphql/dist";
+import { Arg, Authorized, FieldResolver, Mutation, Resolver, Root } from "type-graphql/dist";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
-import { Household, HouseholdMembership, Member, Role } from "../../models/household";
+import { Household, HouseholdMembership, Member, PermissionValue, Role } from "../../models/household";
 
 @Resolver(() => HouseholdMembership)
 export class HouseholdMembershipResolver {
@@ -50,6 +50,12 @@ export class HouseholdMembershipResolver {
     @FieldResolver(() => String)
     async roleName(@Root() membership: HouseholdMembership): Promise<string> {
         return await this.role(membership).then(r => r.name);
+    }
+
+    @Authorized(['ADMIN','READ'])
+    @FieldResolver(() => [PermissionValue])
+    async permissions(@Root() membership: HouseholdMembership): Promise<PermissionValue[]> {
+        return await membership.permissions;
     }
 
     @Mutation(() => HouseholdMembership)

@@ -38,7 +38,7 @@ export default class App {
             engine: {
                 apiKey: APOLLO_ENGINE_KEY,
             },
-            context: getContextFromRequest,
+            context: (params: { req: Request }) => getContextFromRequest(params),
         });
 
         this._express.use(removeXPoweredBy());

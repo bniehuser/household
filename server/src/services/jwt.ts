@@ -3,7 +3,7 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import trim from 'lodash/trim';
-import { Request } from "express";
+import { Request, Response } from "express";
 import { getRepository } from 'typeorm';
 import { Household, Member } from "../models/household";
 import { IContext } from '../application/types/context';
@@ -55,14 +55,16 @@ export const getTokenFromLogin = async (login: ILoginCredentials) => {
     return null;
 };
 
-export const getContextFromRequest = async (req: Request): Promise<IContext> => {
-    if (!req.headers.authorization) {
+export const getContextFromRequest = async ({req}: {req:Request}): Promise<IContext> => {
+    if (!req.headers || !req.headers.authorization) {
+        console.log('no auth', Object.keys(req));
         return null;
     }
 
     const headerMatch = req.headers.authorization.match(/^Bearer\s+?(.+?)\s*$/);
 
     if (!headerMatch) {
+        console.log('no match');
         return null;
     }
 

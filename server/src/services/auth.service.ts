@@ -2,7 +2,7 @@ import { AuthChecker } from 'type-graphql/dist';
 import { IContext } from '../application/types/context';
 import { getRepository } from 'typeorm';
 import { HouseholdMembership } from '../models/household';
-import { PermissionType } from '@common/types/permission';
+import { PermissionType } from '../../../@common/types/permission';
 import { logger } from './logging';
 
 export class AuthService {
@@ -12,6 +12,7 @@ export class AuthService {
         {context: {member, household}},
         roles,
     ) => {
+        console.log('running auth checker');
         if (!member) { return false; } // never ok if not member
         if (roles.length === 0) { return true; } // no roles, ok if member
 

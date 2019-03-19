@@ -1,5 +1,5 @@
 import { HouseholdMembership, Member } from "../../models/household";
-import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql/dist";
+import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql/dist";
 import { Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Context } from "vm";
@@ -14,6 +14,7 @@ export class MemberResolver {
         @InjectRepository(HouseholdMembership) private readonly membershipRepository: Repository<HouseholdMembership>,
     ) {}
 
+    @Authorized()
     @Query(() => [Member])
     members(): Promise<Member[]> {
         return this.memberRepository.find({ relations: ['memberships', 'memberships.household']});

@@ -1,4 +1,4 @@
-import { FieldResolver, Query, Resolver, Root } from "type-graphql/dist";
+import { Authorized, FieldResolver, Query, Resolver, Root } from "type-graphql/dist";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Repository } from "typeorm";
 import { Household, HouseholdMembership, Member } from "../../models/household";
@@ -11,6 +11,7 @@ export class HouseholdResolver {
         @InjectRepository(Member) private readonly memberRepository: Repository<Member>,
     ) {}
 
+    @Authorized()
     @Query(() => [Household])
     households(): Promise<Household[]> {
         return this.householdRepository.find({ relations: ['memberships', 'memberships.member']});
