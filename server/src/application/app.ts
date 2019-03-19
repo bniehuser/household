@@ -1,16 +1,14 @@
 import path from 'path';
-import express, { Request } from 'express';
+import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import { json } from 'body-parser';
-import { removeXPoweredBy } from '../middleware/index';
+import { removeXPoweredBy } from '../middleware';
 import authRoutes from './routes/auth';
-import { postRouteLogging, preRouteLogging } from "../services/logging";
 import { buildSchema } from "type-graphql";
 import AllResolvers from "../resolvers";
-import { Container } from "typedi";
-import { getContextFromRequest } from '../services/jwt';
-import { AuthService } from '../services';
+import { Container, Inject } from "typedi";
+import { AuthService, LogService } from '../services';
 
 const { NODE_ENV, APOLLO_ENGINE_KEY } = process.env;
 
@@ -20,6 +18,10 @@ export default class App {
     private _apollo: ApolloServer;
     private _express: express.Express;
 
+    constructor(
+        @Inject('AuthService') private readonly authService: AuthService,
+        @Inject('LogService') private readonly logService: LogService,
+    ) {}
 
     async init() {
 
@@ -28,7 +30,7 @@ export default class App {
         const schema = await buildSchema({
             resolvers: AllResolvers,
             container: Container,
-            authChecker: AuthService.authChecker,
+            authChecker: this.authService.authChecker,
         });
 
         this._apollo = new ApolloServer({
@@ -38,7 +40,7 @@ export default class App {
             engine: {
                 apiKey: APOLLO_ENGINE_KEY,
             },
-            context: (params: { req: Request }) => getContextFromRequest(params),
+            context: this.authService.getRequestContext.bind(this.authService),
         });
 
         this._express.use(removeXPoweredBy());
@@ -49,7 +51,7 @@ export default class App {
 
         this._express.use(express.static(path.resolve(__dirname, '../static')));
 
-        this._express.use(preRouteLogging);
+        this._express.use(this.logService.preRouteLogging);
 
         this._express.use(authRoutes);
 
@@ -59,7 +61,7 @@ export default class App {
             bodyParserConfig: false,
         });
 
-        this._express.use(postRouteLogging);
+        this._express.use(this.logService.postRouteLogging);
     }
     get express(): express.Express {
         return this._express;

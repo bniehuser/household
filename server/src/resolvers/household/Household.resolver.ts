@@ -1,6 +1,6 @@
 import { Authorized, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql/dist";
 import { InjectRepository } from "typeorm-typedi-extensions";
-import { Equal, In, Repository } from "typeorm";
+import { Equal, FindOperator, In, Repository } from "typeorm";
 import { Household, HouseholdMembership, Member } from "../../models/household";
 import { IContext } from "../../application/types/context";
 
@@ -15,21 +15,19 @@ export class HouseholdResolver {
     @Authorized()
     @Query(() => [Household])
     async households(@Ctx() context: IContext): Promise<Household[]> {
-        console.log('should find households only where member contains', context.member.fullName);
-        // const query = this.householdRepository.createQueryBuilder('household')
-        //     .innerJoin('household.memberships', 'selectMemberships', 'memberId = :id', {id: context.member.id})
-        //     .leftJoin('household.memberships', 'memberships', 'householdId = household.id')
-        //     .leftJoin('household.memberships.member', 'members', 'id = memberships.memberId')
-        //     .select(['household.*', 'memberships.*','members.*']);
-        // console.log(query.getQuery());
-        //
-        // return Promise.resolve([]); //query.loadMany();
-        const householdIds = await this.membershipRepository.createQueryBuilder('membership')
-            .select('membership.household_id').where('member_id = :id', {id: context.member.id})
-            .getRawMany();
-        console.log(householdIds, context.member.id);
+        const where: { id?: FindOperator<HouseholdMembership>|number } = {};
+        // EWW GROSS, IMPLEMENTATION SHOULD NEVER BE UP TO THE RESOLVER ON THIS
+        if(!context.membership.permissions.some(p => p.key === 'SUPER_ADMIN')) {
+            // should we load households in context?  at least the ids?
+            // we're going to severely slow down the server with all these lookups
+            const householdIds = await this.membershipRepository.createQueryBuilder()
+                .where({memberId: context.membership.member.id})
+                .getMany()
+                .then(memberships => memberships.map(m => m.householdId));
+            where.id = In(householdIds);
+        }
         return await this.householdRepository.find({
-            where: { id: In(householdIds.map(r => r['household_id'])) },
+            where,
             relations: ['memberships', 'memberships.member'],
         });
     }

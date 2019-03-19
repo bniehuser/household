@@ -1,6 +1,5 @@
-import { Household, Member } from '../../models/household';
+import { HouseholdMembership } from '../../models/household';
 
 export interface IContext {
-    member: Member;
-    household?: Household;
+    membership: HouseholdMembership;
 }

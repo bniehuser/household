@@ -1,14 +1,17 @@
 import { Router } from 'express';
-import { getTokenFromLogin, ILoginCredentials } from '../../services/jwt';
+import { AuthService, IAuthCredentials } from '../../services';
+import { Container } from 'typedi';
+
+const authService = Container.get(AuthService);
 
 const router = Router();
 
 export default router.post('/signin', async (req, res) => {
-    const token = await getTokenFromLogin(req.body as ILoginCredentials);
-
-    if (!token) {
+    try {
+        const token = await authService.authenticate(req.body as IAuthCredentials);
+        res.send({ token });
+    } catch(e) {
         res.status(401);
+        res.json({error: e.toString()});
     }
-
-    res.send({ token });
 });

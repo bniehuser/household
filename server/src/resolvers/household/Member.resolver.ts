@@ -59,6 +59,10 @@ export class MemberResolver {
             });
             addMember = await this.memberRepository.save(addMember);
         } else {
+            if(memberInput.password !== undefined) {
+                // this is stupid; should be done in repository
+                memberInput.password = bcrypt.hashSync(memberInput.password);
+            }
             await this.memberRepository.update(addMember.id, memberInput);
         }
         let newMembership = await this.membershipRepository.findOne({member: addMember, householdId});

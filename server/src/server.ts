@@ -2,9 +2,7 @@ import App from './application/app';
 import { Server } from "http";
 import { createConnection, useContainer } from "typeorm";
 import { Container } from "typedi";
-import { logger } from "./services/logging";
 
-const app = new App();
 const port = process.env.PORT || 4000;
 const host = process.env.HOSTNAME || '0.0.0.0';
 let server: Server;
@@ -16,8 +14,10 @@ async function bootstrap() {
     try {
         await createConnection();
     } catch (e) {
-        logger.error(`${e.stack}, ${e.toString()}`);
+        console.error(`${e.stack}, ${e.toString()}`);
     }
+
+    const app = Container.get(App);
     await app.init();
     server = app.express.listen({ port, host }, () => {
         console.log(`🚀 Server ready at http://${host}:${port}/`);

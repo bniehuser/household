@@ -1,5 +1,6 @@
 import { Arg, Field, Mutation, ObjectType, Resolver } from 'type-graphql/dist';
-import { getTokenFromLogin } from '../services/jwt';
+import { AuthService } from '../services';
+import { Inject } from 'typedi';
 
 @ObjectType()
 class AuthResponse {
@@ -14,9 +15,12 @@ class AuthResponse {
 
 @Resolver()
 export class AuthResolver {
+    @Inject('AuthService')
+    private readonly authService: AuthService;
+
     @Mutation(() => AuthResponse)
     async requestToken(@Arg('email') email: string, @Arg('password') password: string, @Arg('householdId') householdId?: number) {
-        const token = await getTokenFromLogin({email, password, householdId});
+        const token = await this.authService.authenticate({email, password, householdId});
         return new AuthResponse(token);
     }
 }

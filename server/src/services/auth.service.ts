@@ -1,34 +1,96 @@
 import { AuthChecker } from 'type-graphql/dist';
 import { IContext } from '../application/types/context';
-import { getRepository } from 'typeorm';
-import { HouseholdMembership } from '../models/household';
+import { HouseholdMembership, Member } from '../models/household';
 import { PermissionType } from '../../../@common/types/permission';
-import { logger } from './logging';
+import { Inject, Service } from 'typedi';
+import { InjectRepository } from 'typeorm-typedi-extensions';
+import { getRepository, Repository } from 'typeorm';
+import { JwtService } from './jwt.service';
+import { Request } from 'express';
+import { LogService } from './log.service';
+import bcrypt from 'bcryptjs';
 
+export interface IAuthCredentials {
+    email: string;
+    password: string;
+    householdId?: number;
+}
+
+@Service('AuthService')
 export class AuthService {
 
+    private memberRepository: Repository<Member>;
+    private membershipRepository: Repository<HouseholdMembership>;
 
-    static authChecker: AuthChecker<IContext> = async (
-        {context: {member, household}},
-        roles,
-    ) => {
-        if (!member) { return false; } // never ok if not member
-        if (roles.length === 0) { return true; } // no roles, ok if member
+    constructor(
+        @Inject('LogService') private readonly logService: LogService,
+        @Inject('JwtService') private readonly jwtService: JwtService,
+    ) {}
 
-        // find membership
-        // TODO: inject repositories; recreating each request is wasteful
-        const membershipRepository = getRepository(HouseholdMembership);
-        let membership: HouseholdMembership;
+    public async authenticate(credentials: IAuthCredentials): Promise<string> {
+        if(!this.memberRepository) { this.memberRepository = getRepository(Member); }
+        if(!this.membershipRepository) { this.membershipRepository = getRepository(HouseholdMembership); }
+        const member = await this.memberRepository.findOne({ email: credentials.email });
+        if (member) {
+            const passIsOk = await bcrypt.compare(credentials.password, member.password);
+            if (passIsOk) {
+                if(credentials.householdId !== undefined) {
+                    const membership = this.membershipRepository.find({member, householdId: credentials.householdId});
+                    if(!membership) {
+                        throw new Error("Invalid household credential for member.");
+                    }
+                }
+                return this.jwtService.getTokenFromData({
+                    memberId: member.id,
+                    householdId: credentials.householdId,
+                })
+            } else {
+                throw new Error("Authentication failed.");
+            }
+        }
+    }
 
-        // get household membership permissions if needed
-        if(household) {
-            membership = await membershipRepository.findOne({member, household});
-        } else {
-            // find superadmin user permissions if no household
-            membership = await membershipRepository.findOne({member, householdId: null});
+    public async getRequestContext(params: {req: Request}): Promise<IContext> {
+        if(!this.membershipRepository) { this.membershipRepository = getRepository(HouseholdMembership); }
+
+        const req = params.req;
+
+        const tokenData = this.jwtService.getDataFromRequest(req);
+
+        if (!tokenData) {
+            return null;
         }
 
-        if(!membership) { return false; }
+        let membership: HouseholdMembership;
+        if(tokenData.householdId) {
+            membership = await this.membershipRepository.findOne(
+                { memberId: tokenData.memberId, householdId: tokenData.householdId },
+                { relations: ['member', 'household'] },
+            );
+        } else {
+            // find superadmin user permissions if no household
+            membership = await this.membershipRepository.findOne(
+                { memberId: tokenData.memberId, householdId: null },
+                { relations: ['member'] }
+            );
+        }
+
+        if(membership === undefined) { return null; }
+
+        this.logService.info('got context from token', { tokenData, membershipId: membership.id });
+
+        return { membership };
+    }
+
+    public authChecker: AuthChecker<IContext> = async (
+        {context: { membership }},
+        roles,
+    ) => {
+        if (!membership) { return false; } // never ok if not member
+        if (roles.length === 0) { return true; } // no roles, ok if member
+
+        // super admins can do anything
+        if(membership.permissions.some(p => p.key === 'SUPER_ADMIN')) { return true; }
 
         // WARNING, WE USE A SPECIALIZED VERSION OF AUTH ROLES,
         // e.g. @Authorized('ADMIN','WRITE')
@@ -37,9 +99,9 @@ export class AuthService {
         let authValue: number;
         if(!authLevel) { authLevel = 'READ'; }
         try {
-            const authValue: number = (<any>PermissionType)[authLevel];
+            authValue = (<any>PermissionType)[authLevel];
         } catch(e) {
-            logger.error('attempted auth on unknown auth level', { authLevel });
+            this.logService.error('attempted auth on unknown auth level', { authLevel });
         }
         if(authValue === undefined || authValue !== parseInt(<any>authValue, 10)) { return false; }
         if (membership.permissions.some(permission => permission.key === authKey && permission.value >= authValue)) {
