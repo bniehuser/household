@@ -29,6 +29,7 @@ export class MemberResolver {
     }
 
     // mutations
+    @Authorized()
     @Mutation(() => Member)
     async addMember(
         @Arg("member") memberInput: MemberInput,
@@ -41,6 +42,7 @@ export class MemberResolver {
         return await this.memberRepository.save(newMember);
     }
 
+    @Authorized()
     @Mutation(() => HouseholdMembership)
     async addHouseholdMember(
         @Arg("member") memberInput: MemberInput,

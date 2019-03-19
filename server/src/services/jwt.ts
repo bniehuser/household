@@ -56,20 +56,12 @@ export const getTokenFromLogin = async (login: ILoginCredentials) => {
 };
 
 export const getContextFromRequest = async ({req}: {req:Request}): Promise<IContext> => {
-    if (!req.headers || !req.headers.authorization) {
-        console.log('no auth', Object.keys(req));
-        return null;
-    }
+    if (!req.headers || !req.headers.authorization) { return null; }
 
     const headerMatch = req.headers.authorization.match(/^Bearer\s+?(.+?)\s*$/);
-
-    if (!headerMatch) {
-        console.log('no match');
-        return null;
-    }
+    if (!headerMatch) { return null; }
 
     const token = headerMatch[1];
-
     let verified: IApiToken;
     try {
         verified = verify(token, getPublicKey(), jwtVerifyOptions) as IApiToken;
@@ -77,12 +69,8 @@ export const getContextFromRequest = async ({req}: {req:Request}): Promise<ICont
         logger.error(e.toString(), e);
         return null;
     }
+    if (!verified) { return null; }
 
-    if (!verified) {
-        return null;
-    }
-
-    // TODO: get user from db and check all good
     const memberRepository = getRepository(Member);
     const member = await memberRepository.findOne(verified.memberId);
 
@@ -91,11 +79,7 @@ export const getContextFromRequest = async ({req}: {req:Request}): Promise<ICont
         const householdRepository = getRepository(Household);
         household = await householdRepository.findOne(verified.householdId)
     }
-
     logger.info('getContextFromRequest', { verified });
 
-    return {
-        member,
-        household,
-    };
+    return { member, household, };
 };

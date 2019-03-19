@@ -6,7 +6,6 @@ class AuthResponse {
 
     constructor(token: string) {
         this.token = token;
-        return this;
     }
 
     @Field()
@@ -16,8 +15,8 @@ class AuthResponse {
 @Resolver()
 export class AuthResolver {
     @Mutation(() => AuthResponse)
-    async requestToken(@Arg('email') email: string, @Arg('password') password: string) {
-        const token = await getTokenFromLogin({email, password});
+    async requestToken(@Arg('email') email: string, @Arg('password') password: string, @Arg('householdId') householdId?: number) {
+        const token = await getTokenFromLogin({email, password, householdId});
         return new AuthResponse(token);
     }
 }

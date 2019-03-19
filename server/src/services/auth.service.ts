@@ -12,7 +12,6 @@ export class AuthService {
         {context: {member, household}},
         roles,
     ) => {
-        console.log('running auth checker');
         if (!member) { return false; } // never ok if not member
         if (roles.length === 0) { return true; } // no roles, ok if member
 

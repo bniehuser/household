@@ -14,7 +14,6 @@ export class HouseholdMembershipResolver {
 
     @FieldResolver()
     async household(@Root() membership: HouseholdMembership): Promise<Household> {
-        console.log('should be looking up household by id', membership.householdId);
         if(membership.household === undefined) {
             membership.household = await this.householdRepository.findOne(membership.householdId);
         }
@@ -58,6 +57,7 @@ export class HouseholdMembershipResolver {
         return await membership.permissions;
     }
 
+    @Authorized()
     @Mutation(() => HouseholdMembership)
     async changeMembershipRole(@Arg("id") id: number, @Arg('roleId') roleId: number): Promise<HouseholdMembership> {
         const membership = await this.membershipRepository.findOne(id);
