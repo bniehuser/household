@@ -1,6 +1,6 @@
-import { HouseholdMembership, Member } from "../../models/household";
+import { Household, HouseholdMembership, Member } from "../../models/household";
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql/dist";
-import { Repository } from "typeorm";
+import { FindOperator, In, Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { MemberInput } from "./types/input/MemberInput";
 import bcrypt from 'bcryptjs';
@@ -16,8 +16,41 @@ export class MemberResolver {
 
     @Authorized()
     @Query(() => [Member])
-    members(): Promise<Member[]> {
-        return this.memberRepository.find({ relations: ['memberships', 'memberships.household']});
+    async members(@Ctx() context: IContext): Promise<Member[]> {
+        const where: { id?: FindOperator<HouseholdMembership>|number } = {};
+        // EWW GROSS, IMPLEMENTATION SHOULD NEVER BE UP TO THE RESOLVER ON THIS
+        if(!context.membership.isSuperAdmin) {
+            // should we load households in context?  at least the ids?
+            // we're going to severely slow down the server with all these lookups
+            const memberIds = await this.membershipRepository.createQueryBuilder()
+                .where({householdId: context.membership.householdId})
+                .getMany()
+                .then(memberships => memberships.map(m => m.memberId));
+            where.id = In(memberIds);
+        }
+        return await this.memberRepository.find({
+            where,
+            relations: [
+                'memberships',
+                'memberships.household',
+            ],
+        });
+
+    }
+
+    @Authorized()
+    @Query(() => Member, { nullable: true })
+    async member(
+        @Ctx() context: IContext,
+        @Arg('id', { nullable: true }) id?: number,
+    ): Promise<Member> {
+        let memberId = context.membership.memberId;
+        if(id) {
+            memberId = context.membership.isSuperAdmin || id === memberId ? id : null;
+        }
+        return memberId
+            ? await this.memberRepository.findOne(memberId, {relations: ['memberships', 'memberships.household']})
+            : await null;
     }
 
     @FieldResolver()
@@ -27,6 +60,7 @@ export class MemberResolver {
         }
         return member.memberships;
     }
+
 
     // mutations
     @Authorized('ADMIN','ADD')

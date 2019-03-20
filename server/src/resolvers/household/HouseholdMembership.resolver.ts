@@ -81,7 +81,8 @@ export class HouseholdMembershipResolver {
         } else {
             if(memberInput.password !== undefined) {
                 // this is stupid; should be done in repository, as part of update
-                MemberRepository.setPassword(addMember, memberInput.password);
+                addMember = MemberRepository.setPassword(addMember, memberInput.password);
+                addMember = await memberRepository.save(addMember);
                 delete memberInput.password;
             }
             await memberRepository.update(addMember.id, memberInput);
