@@ -18,10 +18,7 @@ export class MemberResolver {
     @Query(() => [Member])
     async members(@Ctx() context: IContext): Promise<Member[]> {
         const where: { id?: FindOperator<HouseholdMembership>|number } = {};
-        // EWW GROSS, IMPLEMENTATION SHOULD NEVER BE UP TO THE RESOLVER ON THIS
         if(!context.membership.isSuperAdmin) {
-            // should we load households in context?  at least the ids?
-            // we're going to severely slow down the server with all these lookups
             const memberIds = await this.membershipRepository.createQueryBuilder()
                 .where({householdId: context.membership.householdId})
                 .getMany()
@@ -71,7 +68,7 @@ export class MemberResolver {
     ): Promise<Member> {
         const newMember = this.memberRepository.create({
             ...memberInput,
-            createdBy: membership.member,
+            createdById: membership.memberId,
         });
         return await this.memberRepository.save(newMember);
     }

@@ -74,7 +74,7 @@ export class HouseholdMembershipResolver {
         if(addMember === undefined) {
             addMember = memberRepository.create({
                 ...memberInput,
-                createdBy: membership.member,
+                createdById: membership.memberId,
             });
             MemberRepository.setPassword(addMember, memberInput.password || 'changeme');
             await memberRepository.save(addMember)
