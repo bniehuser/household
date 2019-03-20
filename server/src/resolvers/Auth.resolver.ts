@@ -19,7 +19,11 @@ export class AuthResolver {
     private readonly authService: AuthService;
 
     @Mutation(() => AuthResponse)
-    async requestToken(@Arg('email') email: string, @Arg('password') password: string, @Arg('householdId') householdId?: number) {
+    async requestToken(
+        @Arg('email') email: string,
+        @Arg('password') password: string,
+        @Arg('householdId', {nullable: true}) householdId?: number
+    ) {
         const token = await this.authService.authenticate({email, password, householdId});
         return new AuthResponse(token);
     }

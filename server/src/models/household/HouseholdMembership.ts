@@ -4,7 +4,8 @@ import { Member } from './Member';
 import { Role } from './Role';
 import { BaseModel } from '../_common/BaseModel';
 import { MembershipPermission } from './MembershipPermission';
-import { Field, ObjectType } from "type-graphql/dist";
+import { Authorized, Field, ObjectType } from "type-graphql/dist";
+import { PermissionType } from '../../../../@common/types/permission';
 
 @ObjectType()
 export class PermissionValue {
@@ -63,6 +64,18 @@ export class HouseholdMembership extends BaseModel {
             }
         });
         return permissions;
+    }
+
+    get isSuperAdmin() {
+        return this.permissions.some(p => p.key === 'SUPER_ADMIN');
+    }
+
+    permissionFor(key: string) {
+        return this.permissions.reduce((a, c) => c.key === key ? c.value : a, PermissionType.NONE);
+    }
+
+    hasPermission(key: string, value: number) {
+        return this.permissionFor(key) >= value;
     }
 
 }

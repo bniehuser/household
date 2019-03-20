@@ -2,9 +2,9 @@ import { HouseholdMembership, Member } from "../../models/household";
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql/dist";
 import { Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
-import { Context } from "vm";
 import { MemberInput } from "./types/input/MemberInput";
 import bcrypt from 'bcryptjs';
+import { IContext } from '../../application/types/context';
 
 
 @Resolver(() => Member)
@@ -29,53 +29,19 @@ export class MemberResolver {
     }
 
     // mutations
-    @Authorized()
+    @Authorized('ADMIN','ADD')
     @Mutation(() => Member)
     async addMember(
         @Arg("member") memberInput: MemberInput,
-        @Ctx() { member }: Context,
+        @Ctx() { membership }: IContext,
     ): Promise<Member> {
         const newMember = this.memberRepository.create({
             ...memberInput,
-            createdBy: member,
+            createdBy: membership.member,
         });
         return await this.memberRepository.save(newMember);
     }
 
-    @Authorized()
-    @Mutation(() => HouseholdMembership)
-    async addHouseholdMember(
-        @Arg("member") memberInput: MemberInput,
-        @Arg("householdId") householdId: number,
-        @Arg("roleId") roleId: number,
-        @Ctx() { member }: Context,
-    ): Promise<HouseholdMembership> {
-        let addMember = await this.memberRepository.findOne({email: memberInput.email});
-        if(addMember === undefined) {
-            addMember = this.memberRepository.create({
-                ...memberInput,
-                password: bcrypt.hashSync(memberInput.password || 'changeme'),
-                createdBy: member,
-            });
-            addMember = await this.memberRepository.save(addMember);
-        } else {
-            if(memberInput.password !== undefined) {
-                // this is stupid; should be done in repository
-                memberInput.password = bcrypt.hashSync(memberInput.password);
-            }
-            await this.memberRepository.update(addMember.id, memberInput);
-        }
-        let newMembership = await this.membershipRepository.findOne({member: addMember, householdId});
-        if(newMembership === undefined) {
-            newMembership = await this.membershipRepository.create({
-                member: addMember,
-                householdId,
-                roleId,
-            });
-        } else {
-            newMembership.roleId = roleId;
-        }
-        return await this.membershipRepository.save(newMembership);
-    }
+
 
 }

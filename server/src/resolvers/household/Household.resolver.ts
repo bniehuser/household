@@ -17,7 +17,7 @@ export class HouseholdResolver {
     async households(@Ctx() context: IContext): Promise<Household[]> {
         const where: { id?: FindOperator<HouseholdMembership>|number } = {};
         // EWW GROSS, IMPLEMENTATION SHOULD NEVER BE UP TO THE RESOLVER ON THIS
-        if(!context.membership.permissions.some(p => p.key === 'SUPER_ADMIN')) {
+        if(!context.membership.isSuperAdmin) {
             // should we load households in context?  at least the ids?
             // we're going to severely slow down the server with all these lookups
             const householdIds = await this.membershipRepository.createQueryBuilder()

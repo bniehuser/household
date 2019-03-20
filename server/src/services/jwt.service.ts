@@ -6,8 +6,8 @@ import { FilesystemService } from './filesystem.service';
 import { ConfigService } from './config.service';
 
 export interface ITokenData {
-    memberId: number;
-    householdId?: number;
+    // room to store more stuff here, but for now just a ref to the current login membership
+    membershipId: number;
 }
 
 @Service('JwtService')

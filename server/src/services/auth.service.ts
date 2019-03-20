@@ -34,15 +34,17 @@ export class AuthService {
         if (member) {
             const passIsOk = await bcrypt.compare(credentials.password, member.password);
             if (passIsOk) {
+                let membership: HouseholdMembership;
                 if(credentials.householdId !== undefined) {
-                    const membership = this.membershipRepository.find({member, householdId: credentials.householdId});
-                    if(!membership) {
-                        throw new Error("Invalid household credential for member.");
-                    }
+                    membership = await this.membershipRepository.findOne({member, householdId: credentials.householdId});
+                } else {
+                    membership = await this.membershipRepository.findOne({member, householdId: null});
+                }
+                if(!membership) {
+                    throw new Error("Invalid household credential for member.");
                 }
                 return this.jwtService.getTokenFromData({
-                    memberId: member.id,
-                    householdId: credentials.householdId,
+                    membershipId: membership.id,
                 })
             } else {
                 throw new Error("Authentication failed.");
@@ -57,27 +59,18 @@ export class AuthService {
 
         const tokenData = this.jwtService.getDataFromRequest(req);
 
-        if (!tokenData) {
+        if (!tokenData || !tokenData.membershipId) {
             return null;
         }
 
-        let membership: HouseholdMembership;
-        if(tokenData.householdId) {
-            membership = await this.membershipRepository.findOne(
-                { memberId: tokenData.memberId, householdId: tokenData.householdId },
-                { relations: ['member', 'household'] },
-            );
-        } else {
-            // find superadmin user permissions if no household
-            membership = await this.membershipRepository.findOne(
-                { memberId: tokenData.memberId, householdId: null },
-                { relations: ['member'] }
-            );
-        }
+        const membership = await this.membershipRepository.findOne(
+            { id: tokenData.membershipId },
+            { relations: ['member', 'household'] },
+        );
 
         if(membership === undefined) { return null; }
 
-        this.logService.info('got context from token', { tokenData, membershipId: membership.id });
+        this.logService.debug('got context from token', { tokenData, membershipId: membership.id, adminPermission: PermissionType[membership.permissionFor('ADMIN')] });
 
         return { membership };
     }
@@ -86,11 +79,15 @@ export class AuthService {
         {context: { membership }},
         roles,
     ) => {
+        if(roles) { this.logService.info('checking permission for roles', { roles }); }
         if (!membership) { return false; } // never ok if not member
         if (roles.length === 0) { return true; } // no roles, ok if member
 
         // super admins can do anything
-        if(membership.permissions.some(p => p.key === 'SUPER_ADMIN')) { return true; }
+        if(membership.isSuperAdmin) {
+            this.logService.info(`${membership.member.fullName} is a SUPER ADMIN`);
+            return true;
+        }
 
         // WARNING, WE USE A SPECIALIZED VERSION OF AUTH ROLES,
         // e.g. @Authorized('ADMIN','WRITE')
@@ -99,12 +96,13 @@ export class AuthService {
         let authValue: number;
         if(!authLevel) { authLevel = 'READ'; }
         try {
-            authValue = (<any>PermissionType)[authLevel];
+            authValue = (<any>PermissionType)[authLevel]; // get enum index from text name
         } catch(e) {
             this.logService.error('attempted auth on unknown auth level', { authLevel });
         }
         if(authValue === undefined || authValue !== parseInt(<any>authValue, 10)) { return false; }
-        if (membership.permissions.some(permission => permission.key === authKey && permission.value >= authValue)) {
+        if (membership.hasPermission(authKey, authValue)) {
+            this.logService.info(`granted permission for ${authKey} / ${authValue} to ${membership.member.fullName}`);
             // grant access if the roles overlap
             return true;
         }
