@@ -49,7 +49,7 @@ export default class App {
 
         this._express.use(json());
 
-        this._express.use(express.static(path.resolve(__dirname, '../static')));
+        this._express.use(express.static(path.resolve(__dirname, '../../static')));
 
         this._express.use(this.logService.preRouteLogging);
 
