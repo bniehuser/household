@@ -1,27 +1,37 @@
 import React, { Component } from 'react';
 import Logo from './components/Logo';
 import './App.scss';
-import { Section, Heading, Content } from 'react-bulma-components';
+import {
+    Section,
+    Content,
+    Navbar,
+    NavbarBrand,
+    NavbarItem,
+    NavbarMenu,
+    NavbarStart,
+    NavbarEnd,
+    Field,
+    Control, Input, Icon
+} from 'bloomer';
+import FAIcon from "./components/Icon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Nav from "./components/Nav";
 
 class App extends Component {
   render() {
     return (
       <>
-      <Section>
-        <Heading>
-            <Logo/>
-        </Heading>
-      </Section>
+          <Nav/>
       <Section>
           <Content>
-              Edit <code>src/App.tsx</code> and save to reload.
+              should be <code>edited</code> now.
           </Content>
           <a
-              href="https://reactjs.org"
+              href="http://localhost:4000/graphql"
               target="_blank"
               rel="noopener noreferrer"
           >
-              Learn React
+              playground
           </a>
       </Section>
         </>

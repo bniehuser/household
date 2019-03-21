@@ -1,73 +1,59 @@
-$black:        hsl(0, 0%, 4%) !default
-$black-bis:    hsl(0, 0%, 7%) !default
-$black-ter:    hsl(0, 0%, 14%) !default
+@import "~bulma/sass/utilities/functions.sass"
+@import "~bulma/sass/utilities/initial-variables.sass"
 
-$grey-darker:  hsl(0, 0%, 21%) !default
-$grey-dark:    hsl(0, 0%, 29%) !default
-$grey:         hsl(0, 0%, 48%) !default
-$grey-light:   hsl(0, 0%, 71%) !default
-$grey-lighter: hsl(0, 0%, 86%) !default
+$black:        hsl(164, 74%, 6%)  //#041B15 //hsl(0, 0%, 4%)
+$black-bis:    hsl(0, 0%, 7%)
+$black-ter:    hsl(0, 0%, 14%)
 
-$white-ter:    hsl(0, 0%, 96%) !default
-$white-bis:    hsl(0, 0%, 98%) !default
-$white:        hsl(0, 0%, 100%) !default
+$grey-darker:  hsl(0, 0%, 21%)
+$grey-dark:    hsl(0, 0%, 29%)
+$grey:         hsl(0, 0%, 48%)
+$grey-light:   hsl(0, 0%, 71%)
+$grey-lighter: hsl(0, 0%, 86%)
 
-$orange:       hsl(14,  100%, 53%) !default
-$yellow:       hsl(48,  100%, 67%) !default
-$green:        hsl(141, 71%,  48%) !default
-$turquoise:    hsl(171, 100%, 41%) !default
-$cyan:         hsl(204, 86%,  53%) !default
-$blue:         hsl(217, 71%,  53%) !default
-$purple:       hsl(271, 100%, 71%) !default
-$red:          hsl(348, 100%, 61%) !default
+$white-ter:    hsl(0, 0%, 96%)
+$white-bis:    hsl(0, 0%, 98%)
+$white:        hsl(0, 0%, 100%)
+
+$orange:       hsl(14,  100%, 53%)
+$yellow:       hsl(48,  100%, 67%)
+$green:        hsl(141, 71%,  48%)
+$turquoise:    hsl(171, 100%, 41%)
+$cyan:         hsl(204, 86%,  53%)
+$blue:         hsl(217, 71%,  53%)
+$purple:       hsl(271, 100%, 71%)
+$red:          hsl(348, 100%, 61%)
+
+$hh-blue: #70D1FE
+$hh-orange: #FED90F
 
 // Typography
 
-$family-sans-serif: BlinkMacSystemFont, -apple-system, "Roboto", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif !default
-$family-monospace: monospace !default
-$render-mode: optimizeLegibility !default
+$family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif
+$family-header: 'Montserrat', $family-sans-serif
+$family-monospace: monospace
+$render-mode: optimizeLegibility
 
-$size-1: 3rem !default
-$size-2: 2.5rem !default
-$size-3: 2rem !default
-$size-4: 1.5rem !default
-$size-5: 1.25rem !default
-$size-6: 1rem !default
-$size-7: 0.75rem !default
-
-$weight-light: 300 !default
-$weight-normal: 400 !default
-$weight-medium: 500 !default
-$weight-semibold: 600 !default
-$weight-bold: 700 !default
-
-// Responsiveness
-
-// The container horizontal gap, which acts as the offset for breakpoints
-$gap: 64px !default
-// 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
-$tablet: 769px !default
-// 960px container + 4rem
-$desktop: 960px + (2 * $gap) !default
-// 1152px container + 4rem
-$widescreen: 1152px + (2 * $gap) !default
-$widescreen-enabled: true !default
-// 1344px container + 4rem
-$fullhd: 1344px + (2 * $gap) !default
-$fullhd-enabled: true !default
+$size-1: 3rem
+$size-2: 2.5rem
+$size-3: 2rem
+$size-4: 1.5rem
+$size-5: 1.25rem
+$size-6: 1rem
+$size-7: 0.75rem
 
 // Miscellaneous
 
-$easing: ease-out !default
-$radius-small: 2px !default
-$radius: 4px !default
-$radius-large: 6px !default
-$radius-rounded: 290486px !default
-$speed: 86ms !default
+$easing: ease-out
+$radius-small: 2px
+$radius: 4px
+$radius-large: 6px
+$radius-rounded: 290486px
+$speed: 86ms
 
 // Flags
 
-$variable-columns: true !default
+$variable-columns: true
 
 
 
@@ -80,96 +66,96 @@ $variable-columns: true !default
 
 /////// more vars
 
-$primary: $turquoise !default
+$primary: $turquoise
 
-$info: $cyan !default
-$success: $green !default
-$warning: $yellow !default
-$danger: $red !default
+$info: $cyan
+$success: $green
+$warning: $yellow
+$danger: $red
 
-$light: $white-ter !default
-$dark: $grey-darker !default
+$light: $grey-darker
+$dark: $white-ter
 
 // Invert colors
 
-$orange-invert: findColorInvert($orange) !default
-$yellow-invert: findColorInvert($yellow) !default
-$green-invert: findColorInvert($green) !default
-$turquoise-invert: findColorInvert($turquoise) !default
-$cyan-invert: findColorInvert($cyan) !default
-$blue-invert: findColorInvert($blue) !default
-$purple-invert: findColorInvert($purple) !default
-$red-invert: findColorInvert($red) !default
+$orange-invert: findColorInvert($orange)
+$yellow-invert: findColorInvert($yellow)
+$green-invert: findColorInvert($green)
+$turquoise-invert: findColorInvert($turquoise)
+$cyan-invert: findColorInvert($cyan)
+$blue-invert: findColorInvert($blue)
+$purple-invert: findColorInvert($purple)
+$red-invert: findColorInvert($red)
 
-$primary-invert: $turquoise-invert !default
-$info-invert: $cyan-invert !default
-$success-invert: $green-invert !default
-$warning-invert: $yellow-invert !default
-$danger-invert: $red-invert !default
-$light-invert: $dark !default
-$dark-invert: $light !default
+$primary-invert: $turquoise-invert
+$info-invert: $cyan-invert
+$success-invert: $green-invert
+$warning-invert: $yellow-invert
+$danger-invert: $red-invert
+$light-invert: $dark
+$dark-invert: $light
 
 // General colors
 
-$background: $white-ter !default
+$background: $grey-darker
 
-$border: $grey-lighter !default
-$border-hover: $grey-light !default
+$border: findColorInvert($grey-lighter)
+$border-hover: findColorInvert($grey-light)
 
 // Text colors
 
-$text: $grey-dark !default
-$text-invert: findColorInvert($text) !default
-$text-light: $grey !default
-$text-strong: $grey-darker !default
+$text: $grey-darker
+$text-invert: findColorInvert($text)
+$text-light: findColorInvert($grey-darker)
+$text-strong: findColorInvert($grey)
 
 // Code colors
 
-$code: $red !default
-$code-background: $background !default
+$code: $red
+$code-background: $background
 
-$pre: $text !default
-$pre-background: $background !default
+$pre: $text
+$pre-background: $background
 
 // Link colors
 
-$link: $blue !default
-$link-invert: $blue-invert !default
-$link-visited: $purple !default
+$link: darken($hh-blue, 15)
+$link-invert: findColorInvert(darken($hh-blue, 15))
+$link-visited: $purple
 
-$link-hover: $grey-darker !default
-$link-hover-border: $grey-light !default
+$link-hover: findColorInvert($grey-darker)
+$link-hover-border: findColorInvert($grey-light)
 
-$link-focus: $grey-darker !default
-$link-focus-border: $blue !default
+$link-focus: findColorInvert($grey-darker)
+$link-focus-border: $blue
 
-$link-active: $grey-darker !default
-$link-active-border: $grey-dark !default
+$link-active: findColorInvert($grey-darker)
+$link-active-border: findColorInvert($grey-dark)
 
 // Typography
 
-$family-primary: $family-sans-serif !default
-$family-secondary: $family-sans-serif !default
-$family-code: $family-monospace !default
+$family-primary: $family-sans-serif
+$family-secondary: $family-sans-serif
+$family-code: $family-monospace
 
-$size-small: $size-7 !default
-$size-normal: $size-6 !default
-$size-medium: $size-5 !default
-$size-large: $size-4 !default
+$size-small: $size-7
+$size-normal: $size-6
+$size-medium: $size-5
+$size-large: $size-4
 
 // Lists and maps
-$custom-colors: null !default
-$custom-shades: null !default
+$custom-colors: null
+$custom-shades: null
 
-$colors: mergeColorMaps(("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)), $custom-colors) !default
-$shades: mergeColorMaps(("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis), $custom-shades) !default
+$colors: mergeColorMaps(("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)), $custom-colors)
+$shades: mergeColorMaps(("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis), $custom-shades)
 
-$sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
+$sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7
 
 
 ///////// basic customization
 
-$body-background-color:	$white
+$body-background-color:	$white-ter
 $body-size:	16px
 $body-rendering: optimizeLegibility
 $body-family: $family-primary
@@ -185,3 +171,9 @@ $hr-height: 2px
 $hr-margin: 1.5rem 0
 $strong-color: $text-strong
 $strong-weight: $weight-bold
+
+$navbar-background-color: $black
+$navbar-item-hover-background-color: $grey-darker
+$navbar-item-color: $grey-lighter
+$navbar-item-active-color: $white
+$navbar-item-hover-color: $white
