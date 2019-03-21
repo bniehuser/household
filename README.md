@@ -5,6 +5,9 @@ a management application for household concerns
 
 inspiration from
 
+- [_task management apps_](https://blog.hubspot.com/marketing/best-to-do-list-apps-tools)
+- [_more task management apps_](https://clickup.com/blog/task-management-software/)
+
 - [jchapple/apollo-graphql-express-objection-server](https://github.com/jchapple/apollo-graphql-express-objection-server)
 - [jchapple/nextjs-apollo-bulma-boilerplate](https://github.com/jchapple/nextjs-apollo-bulma-boilerplate)
 - [async-labs/saas](https://github.com/async-labs/saas)
