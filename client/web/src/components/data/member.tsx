@@ -13,6 +13,11 @@ const MEMBER = gql`
       memberships {
         householdName
         householdId
+        household {
+          memberships {
+            memberName
+          }
+        }
       }
     }
   }

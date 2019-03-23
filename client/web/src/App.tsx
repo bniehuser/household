@@ -27,24 +27,19 @@ class App extends Component<IProps, IState> {
         <ApolloProvider client={client}>
           <Nav/>
       <Section>
-          <Login loggedIn={(loggedIn: boolean) => this.setState({loggedIn})}/>
+          <Login loginStatus={this.state.loggedIn} loggedIn={(loggedIn: boolean) => this.setState({loggedIn})}/>
           {this.state.loggedIn && (
               <Member>
-                  {({data}: {data:any}) => {
-                      return <p>hey, looks like you're {data.alias}.  Good to see you!</p>;
-                  }}
+                  {({data}: {data:any}) => (
+                      <div><p>hey, looks like you're {data.member.alias}, from the {data.member.memberships[0].householdName} household.  Good to see you!</p>
+                          Your other household members are
+                          <ul>
+                          {data.member.memberships[0].household.memberships.map((d: any) => (<li key={d.memberName}>{d.memberName}</li>))}
+                          </ul>
+                      </div>
+                  )}
               </Member>
           )}
-          <Content>
-              should be <code>edited</code> now.
-          </Content>
-          <a
-              href="http://localhost:4000/graphql"
-              target="_blank"
-              rel="noopener noreferrer"
-          >
-              playground
-          </a>
       </Section>
         </ApolloProvider>
     );

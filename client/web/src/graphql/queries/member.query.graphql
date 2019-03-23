@@ -1,0 +1,17 @@
+{
+    member {
+        firstName
+        lastName
+        alias
+        email
+        memberships {
+            householdName
+            householdId
+            household {
+                memberships {
+                    memberName
+                }
+            }
+        }
+    }
+}

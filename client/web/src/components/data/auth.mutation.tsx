@@ -12,7 +12,16 @@ const MEMBER = gql`
 `;
 
 export default (props: any) => (
-    <Mutation mutation={MEMBER}>
+    <Mutation mutation={MEMBER}
+        onCompleted={(data: any) => {
+            console.log('completed data was', data);
+            if(data && data.requestToken && data.requestToken.token) {
+                console.log('setting token', data.requestToken.token);
+                localStorage.setItem('token', data.requestToken.token);
+                props.loggedIn(true);
+            }
+        }}
+    >
         {(requestToken, { loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) {
@@ -20,18 +29,14 @@ export default (props: any) => (
                 return `Error! ${error.message}`;
             }
 
-            if(data && data.token) {
-                console.log('running with token');
-                localStorage.setItem('token', data.token);
-                props.loggedIn(true);
-            }
+            let isLoggedIn = !!props.loginStatus;
 
             let email: HTMLInputElement;
             let password: HTMLInputElement;
 
             return (
                 <>
-                    {data && data.token ? (
+                    {isLoggedIn ? (
                         <p>Wow, you logged in.
                             <a href={'#'} onClick={event => {
                                 event.preventDefault();
@@ -54,7 +59,6 @@ export default (props: any) => (
                             <input type={'text'} ref={r => r ? password = r : null} name={'password'} placeholder={'password'}/><br/>
                             <button type={'submit'}>go</button>
                         </form>
-                    )}
                     )}
                 </>
             );
