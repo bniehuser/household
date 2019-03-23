@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
-import Logo from './components/Logo';
 import './App.scss';
 import {
     Section,
     Content,
-    Navbar,
-    NavbarBrand,
-    NavbarItem,
-    NavbarMenu,
-    NavbarStart,
-    NavbarEnd,
-    Field,
-    Control, Input, Icon
 } from 'bloomer';
-import FAIcon from "./components/Icon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Nav from "./components/Nav";
+import { ApolloProvider } from "react-apollo";
 
-class App extends Component {
+import client from './api/client';
+import Login from './components/data/auth.mutation';
+import Member from './components/data/member';
+
+interface IProps {}
+interface IState {
+    loggedIn: boolean;
+}
+
+class App extends Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+        this.state = { loggedIn: !!localStorage.getItem('token') }
+    }
+
   render() {
     return (
-      <>
+        <ApolloProvider client={client}>
           <Nav/>
       <Section>
+          <Login loggedIn={(loggedIn: boolean) => this.setState({loggedIn})}/>
+          {this.state.loggedIn && (
+              <Member>
+                  {({data}: {data:any}) => {
+                      return <p>hey, looks like you're {data.alias}.  Good to see you!</p>;
+                  }}
+              </Member>
+          )}
           <Content>
               should be <code>edited</code> now.
           </Content>
@@ -34,7 +46,7 @@ class App extends Component {
               playground
           </a>
       </Section>
-        </>
+        </ApolloProvider>
     );
   }
 }
