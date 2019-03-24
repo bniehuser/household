@@ -18,16 +18,34 @@ h1, h1, h3, h4, h5, h6, .html-logo {
   }
   svg { margin:.15rem; }
 }
+@function lightTo($color, $light) {
+  @return hsl(hue($color), saturation($color), $light);
+}
 
-.nav-home { background-color: $grey !important; }
-.nav-first { background-color: $green !important; }
-.nav-second { background-color: $blue !important; }
-.nav-third { background-color: $red !important; }
-.nav-fourth { background-color: $purple !important; }
+@mixin tabStyle($color) {
+  background-color: $color !important;
+  color:lightTo($color, lightness($color) * 1.5) !important;
+  border-width:1px 1px 0 1px;
+  border-color:lighten($color, 30) !important;
+}
+
+.nav-home { @include tabStyle($grey) }
+.nav-first { @include tabStyle($green) }
+.nav-second { @include tabStyle($blue) }
+.nav-third { @include tabStyle($red) }
+.nav-fourth { @include tabStyle($purple) }
 
 .navbar-start .navbar-item {
   height:2rem;
   border-radius:.6rem .6rem 0 0;
+  box-shadow: inset 0 -15px 22px -15px rgba(0,0,0,.4);
+}
+.navbar-start .navbar-item.is-active {
+  height:2.4rem;
+  color:$white-ter !important;
+  border-radius:.6rem .6rem 0 0;
+  box-shadow: none;
+  align-items: center;
 }
 
 .navbar-start {

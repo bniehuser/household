@@ -35,8 +35,8 @@ export default (props: any) => (
 
             let isLoggedIn = !!props.loginStatus;
 
-            let email: HTMLElement;
-            let password: HTMLElement;
+            let email: string;
+            let password: string;
 
             return isLoggedIn ? (
                 <Section>
@@ -58,8 +58,8 @@ export default (props: any) => (
                             event.preventDefault();
                             console.log('email, password', email, password);
                             requestToken({variables:{
-                                email: (email as HTMLInputElement).value,
-                                password: (password as HTMLInputElement).value,
+                                email,
+                                password,
                                 householdId: 1,
                             }});
                         }}>
@@ -68,14 +68,14 @@ export default (props: any) => (
                             <Field>
                                 <Label>Email</Label>
                                 <Control hasIcons={'left'}>
-                                    <Input type={'email'} onChange={e => console.log(e) }  ref={r => r ? email = r : null} name={'email'} placeholder={'email'}/><br/>
+                                    <Input type={'email'} onChange={(e: any) => email = e.target['value'] } name={'email'} placeholder={'email'}/><br/>
                                     <Icon isAlign={'left'} className={'fas fa-user'}/>
                                 </Control>
                             </Field>
                             <Field>
                                 <Label>Password</Label>
                                 <Control>
-                                    <Input type={'password'} ref={r => r ? password = r : null} name={'password'} placeholder={'password'}/><br/>
+                                    <Input type={'password'} onChange={(e: any) => password = e.target['value'] } name={'password'} placeholder={'password'}/><br/>
                                 </Control>
                             </Field>
                             <Field isGrouped={true}>

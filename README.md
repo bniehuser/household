@@ -5,6 +5,7 @@ a management application for household concerns
 
 inspiration from
 
+- [_OCR_](https://heartbeat.fritz.ai/building-text-detection-apps-for-ios-and-android-using-react-native-42fe3c7e339)
 - [_task management apps_](https://blog.hubspot.com/marketing/best-to-do-list-apps-tools)
 - [_more task management apps_](https://clickup.com/blog/task-management-software/)
 - [_tab switch animation_](https://codepen.io/Gelsot/pen/eMOvOP)
