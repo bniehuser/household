@@ -9,8 +9,8 @@ class AuthResponse {
         this.token = token;
     }
 
-    @Field()
-    token: string;
+    @Field({nullable: true})
+    token?: string;
 }
 
 @Resolver()

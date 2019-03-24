@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
+import { Button, Control, Field, Help, Icon, Input, Label, Section, Tile } from 'bloomer';
 
 const MEMBER = gql`
   mutation requestToken($email: String!, $password: String!, $householdId: Float) {
@@ -22,45 +23,71 @@ export default (props: any) => (
             }
         }}
     >
-        {(requestToken, { loading, error, data }) => {
+        {(requestToken, { client, loading, error }) => {
             if (loading) return "Loading...";
+            let isError = false;
+            let errorMessage = '';
             if (error) {
                 console.log(error);
-                return `Error! ${error.message}`;
+                isError = true;
+                errorMessage = error.message;
             }
 
             let isLoggedIn = !!props.loginStatus;
 
-            let email: HTMLInputElement;
-            let password: HTMLInputElement;
+            let email: HTMLElement;
+            let password: HTMLElement;
 
-            return (
-                <>
-                    {isLoggedIn ? (
-                        <p>Wow, you logged in.
-                            <a href={'#'} onClick={event => {
-                                event.preventDefault();
-                                localStorage.removeItem('token');
-                                props.loggedIn(false);
-                            }}>
-                                log out
-                            </a>
-                        </p>
-                    ) : (
+            return isLoggedIn ? (
+                <Section>
+                    Hey, you're logged in!{' '}
+                    <a href={'#'} onClick={event => {
+                        event.preventDefault();
+                        localStorage.removeItem('token');
+                        props.loggedIn(false);
+                        client.resetStore();
+                    }}>
+                        log out
+                    </a>
+                </Section>
+            ) : (
+                <Tile isAncestor={true}>
+                <Tile isSize={6}>
+                    <Tile isChild={true} render={() => (
                         <form onSubmit={event => {
                             event.preventDefault();
+                            console.log('email, password', email, password);
                             requestToken({variables:{
-                                email: email.value,
-                                password: password.value,
+                                email: (email as HTMLInputElement).value,
+                                password: (password as HTMLInputElement).value,
                                 householdId: 1,
                             }});
                         }}>
-                            <input type={'text'} ref={r => r ? email = r : null} name={'email'} placeholder={'email'}/><br/>
-                            <input type={'text'} ref={r => r ? password = r : null} name={'password'} placeholder={'password'}/><br/>
-                            <button type={'submit'}>go</button>
+
+
+                            <Field>
+                                <Label>Email</Label>
+                                <Control hasIcons={'left'}>
+                                    <Input type={'email'} onChange={e => console.log(e) }  ref={r => r ? email = r : null} name={'email'} placeholder={'email'}/><br/>
+                                    <Icon isAlign={'left'} className={'fas fa-user'}/>
+                                </Control>
+                            </Field>
+                            <Field>
+                                <Label>Password</Label>
+                                <Control>
+                                    <Input type={'password'} ref={r => r ? password = r : null} name={'password'} placeholder={'password'}/><br/>
+                                </Control>
+                            </Field>
+                            <Field isGrouped={true}>
+                                <Control>
+                                    <Button isColor={'primary'} type={'submit'}>go</Button>
+                                </Control>
+                                {isError && <Help isColor={'error'}>{errorMessage}</Help>}
+                            </Field>
                         </form>
-                    )}
-                </>
+                    )}/>
+                </Tile>
+                </Tile>
             );
         }}
     </Mutation>

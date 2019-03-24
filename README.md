@@ -8,6 +8,7 @@ inspiration from
 - [_task management apps_](https://blog.hubspot.com/marketing/best-to-do-list-apps-tools)
 - [_more task management apps_](https://clickup.com/blog/task-management-software/)
 - [_tab switch animation_](https://codepen.io/Gelsot/pen/eMOvOP)
+- [_light/dark theme compatability_](https://medium.com/eightshapes-llc/light-dark-9f8ea42c9081)
 - [jchapple/apollo-graphql-express-objection-server](https://github.com/jchapple/apollo-graphql-express-objection-server)
 - [jchapple/nextjs-apollo-bulma-boilerplate](https://github.com/jchapple/nextjs-apollo-bulma-boilerplate)
 - [async-labs/saas](https://github.com/async-labs/saas)
