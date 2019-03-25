@@ -1,29 +1,39 @@
-/**
- * React Native Business Cards
- * https://github.com/zsajjad/BusinessCard
- *
- */
-
-import React, { Component } from "react";
+import React from "react";
 import { TouchableOpacity, View, ImageBackground } from "react-native";
-import { RNCamera as Camera } from "react-native-camera";
+import { RNCamera as Camera, TrackedTextFeature } from "react-native-camera";
+// @ts-ignore-next-line
 import RNTextDetector from "react-native-text-detector";
 
 import style, { screenHeight, screenWidth } from "./src/styles";
 
 const PICTURE_OPTIONS = {
     quality: 1,
-    fixOrientation: true,
-    forceUpOrientation: true
+    fixOrientation: false,
+    forceUpOrientation: false
 };
 
-export default class App extends React.Component {
-    state = {
-        loading: false,
-        image: null,
-        error: null,
-        visionResp: []
-    };
+interface IProps {}
+
+interface IState {
+    loading: boolean;
+    image: string|null;
+    error: string|null;
+    visionResp: any[];
+}
+
+export default class App extends React.Component<IProps, IState> {
+
+    camera?: Camera;
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            loading: false,
+            image: null,
+            error: null,
+            visionResp: []
+        };
+    }
 
     /**
      * reset
@@ -33,7 +43,7 @@ export default class App extends React.Component {
      * @param {string} [error="OTHER"]
      * @memberof App
      */
-    reset(error = "OTHER") {
+    reset(error:string = "OTHER") {
         this.setState(
             {
                 loading: false,
@@ -55,7 +65,7 @@ export default class App extends React.Component {
      * @param {*} camera
      * @author Zain Sajjad
      */
-    takePicture = async camera => {
+    takePicture = async (camera: Camera) => {
         this.setState({
             loading: true
         });
@@ -93,7 +103,7 @@ export default class App extends React.Component {
      * @memberof App
      * @author Zain Sajjad
      */
-    processImage = async (uri, imageProperties) => {
+    processImage = async (uri: string, imageProperties: any): Promise<void> => {
         const visionResp = await RNTextDetector.detectFromUri(uri);
         console.log(visionResp);
         if (!(visionResp && visionResp.length > 0)) {
@@ -115,7 +125,7 @@ export default class App extends React.Component {
      * @param {object} imageProperties  Other properties of image to be processed
      * @memberof App
      */
-    mapVisionRespToScreen = (visionResp, imageProperties) => {
+    mapVisionRespToScreen = (visionResp: any[], imageProperties: any) => {
         const IMAGE_TO_SCREEN_Y = screenHeight / imageProperties.height;
         const IMAGE_TO_SCREEN_X = screenWidth / imageProperties.width;
 
@@ -143,13 +153,13 @@ export default class App extends React.Component {
             <View style={style.screen}>
                 {!this.state.image ? (
                     <Camera
-                        ref={cam => {
+                        ref={(cam: Camera) => {
                             this.camera = cam;
                         }}
                         key="camera"
                         style={style.camera}
-                        notAuthorizedView={null}
                         playSoundOnCapture
+                        onTextRecognized={({ textBlocks}) => console.log(textBlocks.map(b => b.value))}
                     >
                         {({ camera, status }) => {
                             if (status !== "READY") {
