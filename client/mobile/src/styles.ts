@@ -4,7 +4,7 @@
  *
  */
 
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 import Colors from "./theme/Colors";
 import Dimensions from "./theme/Dimensions";
@@ -17,13 +17,34 @@ const styles = StyleSheet.create({
     },
     camera: {
         position: "absolute",
-        width: Dimensions.screenWidth,
+        width: Dimensions.screenWidth/2,
         height: Dimensions.screenHeight,
         alignItems: "center",
+        alignSelf: "center",
         justifyContent: "center",
         top: 0,
         left: 0,
         flex: 1
+    },
+    leftHalf: {
+        width: Dimensions.screenWidth/2,
+        height: Dimensions.screenHeight,
+        alignItems: "center",
+        alignSelf: "flex-start",
+        justifyContent: "center",
+        flex: 1,
+        backgroundColor: 'black',
+        color: 'white'
+    },
+    rightHalf: {
+        width: Dimensions.screenWidth/2,
+        height: Dimensions.screenHeight,
+        alignItems: "center",
+        alignSelf: "flex-end",
+        justifyContent: "center",
+        flex: 1,
+        backgroundColor: 'white',
+        color: 'black'
     },
     imageBackground: {
         position: "absolute",

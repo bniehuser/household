@@ -1,29 +1,51 @@
-/**
- * React Native Business Cards
- * https://github.com/zsajjad/BusinessCard
- *
- */
-
-import React, { Component } from "react";
-import { TouchableOpacity, View, ImageBackground } from "react-native";
-import { RNCamera as Camera } from "react-native-camera";
+import React from "react";
+import { TouchableOpacity, View, Text, ImageBackground } from "react-native";
+import { RNCamera as Camera, TrackedTextFeature } from "react-native-camera";
+// @ts-ignore-next-line
 import RNTextDetector from "react-native-text-detector";
 
 import style, { screenHeight, screenWidth } from "./styles";
+import { IReceipt, IReceiptItem } from './interface/receipt';
+import Receipt from './components/Receipt';
 
 const PICTURE_OPTIONS = {
     quality: 1,
-    fixOrientation: true,
-    forceUpOrientation: true
+    fixOrientation: false,
+    forceUpOrientation: false
 };
 
-export default class App extends React.Component {
-    state = {
-        loading: false,
-        image: null,
-        error: null,
-        visionResp: []
-    };
+interface IProps {}
+
+interface IState {
+    loading: boolean;
+    image: string|null;
+    error: string|null;
+    visionResp: any[];
+    receipt?: IReceipt;
+}
+
+interface IRNCameraRender {
+    camera: Camera;
+    status: string;
+}
+
+interface ITextRecognizedResponse {
+    textBlocks: TrackedTextFeature[];
+}
+
+export default class App extends React.Component<IProps, IState> {
+
+    camera?: Camera;
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            loading: false,
+            image: null,
+            error: null,
+            visionResp: []
+        };
+    }
 
     /**
      * reset
@@ -33,7 +55,7 @@ export default class App extends React.Component {
      * @param {string} [error="OTHER"]
      * @memberof App
      */
-    reset(error = "OTHER") {
+    reset(error:string = "OTHER") {
         this.setState(
             {
                 loading: false,
@@ -55,7 +77,7 @@ export default class App extends React.Component {
      * @param {*} camera
      * @author Zain Sajjad
      */
-    takePicture = async camera => {
+    takePicture = async (camera: Camera) => {
         this.setState({
             loading: true
         });
@@ -93,11 +115,12 @@ export default class App extends React.Component {
      * @memberof App
      * @author Zain Sajjad
      */
-    processImage = async (uri, imageProperties) => {
+    processImage = async (uri: string, imageProperties: any): Promise<void> => {
         const visionResp = await RNTextDetector.detectFromUri(uri);
         console.log(visionResp);
         if (!(visionResp && visionResp.length > 0)) {
-            throw "UNMATCHED";
+            console.warn("No Text Matched...");
+            this.reset("UNMATCHED");
         }
         this.setState({
             visionResp: this.mapVisionRespToScreen(visionResp, imageProperties)
@@ -115,7 +138,7 @@ export default class App extends React.Component {
      * @param {object} imageProperties  Other properties of image to be processed
      * @memberof App
      */
-    mapVisionRespToScreen = (visionResp, imageProperties) => {
+    mapVisionRespToScreen = (visionResp: any[], imageProperties: any) => {
         const IMAGE_TO_SCREEN_Y = screenHeight / imageProperties.height;
         const IMAGE_TO_SCREEN_X = screenWidth / imageProperties.width;
 
@@ -132,6 +155,67 @@ export default class App extends React.Component {
         });
     };
 
+    processRecognizedText(textBlocks: TrackedTextFeature[]) {
+        console.log(textBlocks.map(b => b.value));
+        let receipt = this.state.receipt;
+        if(receipt === undefined) {
+            receipt = { location: 'unknown', name: '', info: '', total: 0, items: [] };
+        }
+        // blocks to line entries
+        const bits = textBlocks.reduce((a: Array<TrackedTextFeature & IMarking>, c: TrackedTextFeature) => a.concat(c.components), []);
+        const bitHeights = bits.reduce((a, c) => {a.push(c.bounds.size.height); return a; },[] as number[]);
+        const avgBitHeight = bitHeights.reduce((a, c) => a + c, 0) / bitHeights.length;
+        let lines: Array<TrackedTextFeature & IMarking>[] = [];
+        bits.forEach(testBit => {
+            if(!testBit.found) {
+                testBit.found = true;
+                const testY = testBit.bounds.origin.y;
+                const line = [testBit];
+                bits.forEach(matchBit => {
+                    if(!matchBit.found && Math.abs(testBit.bounds.origin.y - testY) < avgBitHeight/2) {
+                        matchBit.found = true;
+                        line.push(matchBit);
+                    }
+
+                });
+                lines.push(line);
+            }
+        });
+        let currentItem: IReceiptItem|undefined;
+        lines.sort((a, b) => a[0].bounds.origin.y - b[0].bounds.origin.y).forEach(l => {
+            if(!receipt) { throw "SOMEHOW, NO RECEIPT"; }
+            const fields = l.sort((a, b) => a.bounds.origin.x - b.bounds.origin.x);
+            let m = fields[fields.length-1].value.match(/([0-9]*\.[0-9]{2})/);
+            if(m) {
+                currentItem = { text: fields.map(f => f.value).join('~~'), total: parseFloat(m[1]) };
+                if(currentItem.text.match(/(TOTAL|AMOUNT) ?(DUE)?/i)) {
+                    receipt = { ...receipt, total: currentItem.total };
+                } else {
+                    const foundItem = receipt.items.find(i => currentItem ? i.text === currentItem.text : false);
+                    if(!foundItem) {
+                        receipt = {...receipt, items: [...receipt.items, currentItem] };
+                    } else {
+                        currentItem = foundItem;
+                    }
+                }
+            } else {
+                // probably just an informational line.  if it's really big text let's try to use it as a name
+                if(fields.length === 1) {
+                    if(fields[0].bounds.size.height > avgBitHeight*1.25) {
+                        receipt = { ...receipt, name: fields[0].value, location: fields[0].value};
+                    } else {
+                        receipt = { ...receipt, info: receipt.info + fields[0].value + "\n" };
+                    }
+                } else {
+                    // line with multiple bits of info; do nothing for now
+                }
+            }
+        });
+        // probably SLOW AS HELL
+        this.setState({receipt});
+
+    }
+
     /**
      * React Native render function
      *
@@ -142,29 +226,36 @@ export default class App extends React.Component {
         return (
             <View style={style.screen}>
                 {!this.state.image ? (
-                    <Camera
-                        ref={cam => {
-                            this.camera = cam;
-                        }}
-                        key="camera"
-                        style={style.camera}
-                        notAuthorizedView={null}
-                        playSoundOnCapture
-                    >
-                        {({ camera, status }) => {
-                            if (status !== "READY") {
-                                return null;
-                            }
-                            return (
-                                <View style={style.buttonContainer}>
-                                    <TouchableOpacity
-                                        onPress={() => this.takePicture(camera)}
-                                        style={style.button}
-                                    />
-                                </View>
-                            );
-                        }}
-                    </Camera>
+                    <>
+                    {/*<Camera*/}
+                        {/*ref={(cam: Camera) => { this.camera = cam; }}*/}
+                        {/*key="camera"*/}
+                        {/*style={style.leftHalf}*/}
+                        {/*playSoundOnCapture*/}
+                        {/*onTextRecognized={({ textBlocks }: ITextRecognizedResponse) => this.processRecognizedText(textBlocks)}*/}
+                    {/*>*/}
+                        {/*{({ camera, status }: IRNCameraRender) => {*/}
+                            {/*if (status !== "READY") {*/}
+                                {/*return null;*/}
+                            {/*}*/}
+                            {/*return (*/}
+                                {/*<View style={style.buttonContainer}>*/}
+                                    {/*<TouchableOpacity*/}
+                                        {/*onPress={() => this.takePicture(camera)}*/}
+                                        {/*style={style.button}*/}
+                                    {/*/>*/}
+                                {/*</View>*/}
+                            {/*);*/}
+                        {/*}}*/}
+                    {/*</Camera>*/}
+                    <View style={style.leftHalf}>
+                        <Text>This is the left half -- let's see it</Text>
+                    </View>
+                    <View style={style.rightHalf}>
+                        <Text>This is the right half -- no really</Text>
+                        {/*{this.state.receipt && <Receipt receipt={this.state.receipt}/>}*/}
+                    </View>
+                    </>
                 ) : null}
                 {this.state.image ? (
                     <ImageBackground
@@ -186,4 +277,8 @@ export default class App extends React.Component {
             </View>
         );
     }
+}
+
+interface IMarking {
+    found?: boolean;
 }

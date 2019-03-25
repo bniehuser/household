@@ -107,7 +107,8 @@ export default class App extends React.Component<IProps, IState> {
         const visionResp = await RNTextDetector.detectFromUri(uri);
         console.log(visionResp);
         if (!(visionResp && visionResp.length > 0)) {
-            throw "UNMATCHED";
+            console.warn("No Text Matched...");
+            this.reset("UNMATCHED");
         }
         this.setState({
             visionResp: this.mapVisionRespToScreen(visionResp, imageProperties)
