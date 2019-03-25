@@ -1,4 +1,4 @@
-package com.mobile;
+package com.household;
 
 import android.app.Application;
 

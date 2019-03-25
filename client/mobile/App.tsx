@@ -9,7 +9,7 @@ import { TouchableOpacity, View, ImageBackground } from "react-native";
 import { RNCamera as Camera } from "react-native-camera";
 import RNTextDetector from "react-native-text-detector";
 
-import style, { screenHeight, screenWidth } from "./styles";
+import style, { screenHeight, screenWidth } from "./src/styles";
 
 const PICTURE_OPTIONS = {
     quality: 1,

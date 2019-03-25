@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Household",
-    "slug": "mobile",
+    "slug": "household",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
