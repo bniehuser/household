@@ -17,9 +17,9 @@ interface ITabIconProps {
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }: ITabIconProps) => (
+  tabBarIcon: (props: ITabIconProps) => (
     <TabBarIcon
-      focused={focused}
+      focused={props.focused}
       name={'home'}
     />
   )
@@ -31,9 +31,9 @@ const LinksStack = createStackNavigator({
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }: ITabIconProps) => (
-    <TabBarIcon
-      focused={focused}
+  tabBarIcon: (props: ITabIconProps) => (
+      <TabBarIcon
+          focused={props.focused}
       name={'link'}
     />
   ),
@@ -45,9 +45,9 @@ const SettingsStack = createStackNavigator({
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }: ITabIconProps) => (
-    <TabBarIcon
-      focused={focused}
+  tabBarIcon: (props: ITabIconProps) => (
+      <TabBarIcon
+          focused={props.focused}
       name={'wrench'}
     />
   ),

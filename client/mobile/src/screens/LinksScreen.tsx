@@ -1,7 +1,6 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import React from "react";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import Colors from '../constants/Colors';
-const { ExpoLinksView } = require('@expo/samples');
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -19,7 +18,6 @@ export default class LinksScreen extends React.Component {
     return (
       <ScrollView style={styles.container}>
           <Text>This is some Text on the Links page</Text>
-        <ExpoLinksView/>
       </ScrollView>
     );
   }

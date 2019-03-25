@@ -8,7 +8,6 @@ import {
   // TouchableOpacity,
   View,
 } from 'react-native';
-import { FontAwesome } from "@expo/vector-icons";
 // import { WebBrowser } from 'expo';
 //
 // import { MonoText } from '../components/StyledText';
@@ -25,19 +24,9 @@ export default class HomeScreen extends React.Component {
 
             <View style={{display:'flex', flexDirection:'row', color: '#ddd', marginTop:20, padding:10}}>
                 <View style={{flex:.5, textAlign: 'right'}}>
-                    <FontAwesome
-                        name={'home'}
-                        size={26}
-                        style={[{ marginBottom: -3, padding: 1 }, styles.house]}
-                    />
                     <Text style={[styles.getStartedText, styles.house, { fontFamily: 'montserrat-bold', fontSize: 21 }]}>house</Text>
                 </View>
                 <View style={{flex:.5, textAlign: 'left'}}>
-                    <FontAwesome
-                        name={'hand-grab-o'}
-                        size={25}
-                        style={[{ marginBottom: -3, padding: 1 }, styles.hold]}
-                    />
                     <Text style={[styles.getStartedText, styles.hold, { fontFamily: 'montserrat-bold', fontSize: 21 }]}>hold</Text>
                 </View>
             </View>

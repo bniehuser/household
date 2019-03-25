@@ -1,20 +1,29 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "react-native"
   },
   "dependencies": {
+    "@babel/core": "^7.4.0",
     "@expo/samples": "2.1.1",
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "jest-haste-map": "^24.5.0",
+    "jest-resolve": "^24.5.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.5",
+    "react-art": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-native": "0.58.6",
+    "react-native-camera": "^2.0.2",
+    "react-native-cli": "^2.0.1",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-native-screens": "^1.0.0-alpha.22",
+    "react-native-text-detector": "^0.0.6",
+    "react-native-web": "^0.11.2",
     "react-navigation": "^3.0.9",
     "tslib": "^1.9.3"
   },
@@ -26,7 +35,7 @@
     "@types/react-native": "^0.57.40",
     "@types/react-navigation": "^3.0.5",
     "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^32.0.0",
+    "jest": "^24.5.0",
     "react-native-typescript-transformer": "^1.2.12",
     "typescript": "^3.3.3333"
   },
