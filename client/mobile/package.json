@@ -1,34 +1,35 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "mobile",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@expo/samples": "2.1.1",
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-navigation": "^3.0.9",
-    "tslib": "^1.9.3"
+    "react": "16.8.3",
+    "react-native": "0.59.1",
+    "react-native-camera": "^2.0.2",
+    "react-native-text-detector": "^0.0.6"
   },
   "devDependencies": {
-    "@types/dotenv": "^6.1.0",
-    "@types/expo": "^32.0.8",
-    "@types/expo__vector-icons": "^9.0.1",
+    "@babel/core": "^7.4.0",
+    "@babel/runtime": "^7.4.2",
+    "@react-native-community/eslint-config": "^0.0.3",
+    "@types/jest": "^24.0.11",
     "@types/react": "^16.8.8",
-    "@types/react-native": "^0.57.40",
-    "@types/react-navigation": "^3.0.5",
-    "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^32.0.0",
-    "react-native-typescript-transformer": "^1.2.12",
-    "typescript": "^3.3.3333"
+    "@types/react-native": "^0.57.41",
+    "@types/react-test-renderer": "^16.8.1",
+    "babel-jest": "^24.5.0",
+    "eslint": "^5.15.3",
+    "jest": "^24.5.0",
+    "metro": "^0.53.1",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-test-renderer": "16.8.3",
+    "typescript": "^3.3.4000"
   },
-  "private": true
+  "jest": {
+    "preset": "react-native"
+  }
 }

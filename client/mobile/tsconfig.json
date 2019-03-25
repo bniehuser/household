@@ -1,32 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "jsx": "react-native",
-    "lib": [
-      "es2017"
-    ],
-    "module": "es2015",
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es6"],
     "moduleResolution": "node",
-    "noEmitHelpers": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    // Using the type definitions in @types/expo becuase they are still better than the ones provided by expo. See SvgScreen.tsx and SystemFontsScreen.tsx.
-    "paths": {
-      "expo": [
-        "../node_modules/expo",
-        "../node_modules/@types/expo"
-      ]
-    },
-    "skipLibCheck": true,
-    "sourceMap": false, // Something else (Babel?) is creating the necessary source maps.
+    "noEmit": true,
     "strict": true,
-    "target": "es2017"
+    "target": "esnext"
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "819959134670",
+    "firebase_url": "https://household-f94b2.firebaseio.com",
+    "project_id": "household-f94b2",
+    "storage_bucket": "household-f94b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819959134670:android:563731b8b7303983",
+        "android_client_info": {
+          "package_name": "com.household"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819959134670-4q9fh5u9f5emlf2pq458mntecops8mn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdfmPgu9U_9Qe_ZsTl0eW5eOaC0gp81Ws"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
