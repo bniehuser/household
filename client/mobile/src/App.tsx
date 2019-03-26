@@ -22,6 +22,7 @@ interface IState {
     error: string|null;
     visionResp: any[];
     receipt?: IReceipt;
+    capture: boolean;
 }
 
 interface IRNCameraRender {
@@ -43,7 +44,8 @@ export default class App extends React.Component<IProps, IState> {
             loading: false,
             image: null,
             error: null,
-            visionResp: []
+            visionResp: [],
+            capture: false,
         };
     }
 
@@ -172,7 +174,7 @@ export default class App extends React.Component<IProps, IState> {
                 const testY = testBit.bounds.origin.y;
                 const line = [testBit];
                 bits.forEach(matchBit => {
-                    if(!matchBit.found && Math.abs(testBit.bounds.origin.y - testY) < avgBitHeight/2) {
+                    if(!matchBit.found && Math.abs(matchBit.bounds.origin.y - testY) < avgBitHeight/2) {
                         matchBit.found = true;
                         line.push(matchBit);
                     }
@@ -187,7 +189,7 @@ export default class App extends React.Component<IProps, IState> {
             const fields = l.sort((a, b) => a.bounds.origin.x - b.bounds.origin.x);
             let m = fields[fields.length-1].value.match(/([0-9]*\.[0-9]{2})/);
             if(m) {
-                currentItem = { text: fields.map(f => f.value).join('~~'), total: parseFloat(m[1]) };
+                currentItem = { text: fields.map(f => f.value.replace(/^([ *#~!]?)(.+?)([ *#~!])?$/, "$2")).join('~~'), total: parseFloat(m[1]) };
                 if(currentItem.text.match(/(TOTAL|AMOUNT) ?(DUE)?/i)) {
                     receipt = { ...receipt, total: currentItem.total };
                 } else {
@@ -212,6 +214,7 @@ export default class App extends React.Component<IProps, IState> {
             }
         });
         // probably SLOW AS HELL
+        console.log('new receipt should be', receipt);
         this.setState({receipt});
 
     }
@@ -224,36 +227,36 @@ export default class App extends React.Component<IProps, IState> {
      */
     render() {
         return (
-            <View style={style.screen}>
+            <View style={[style.screen, {display:'flex',flexDirection:'row'}]}>
                 {!this.state.image ? (
                     <>
-                    {/*<Camera*/}
-                        {/*ref={(cam: Camera) => { this.camera = cam; }}*/}
-                        {/*key="camera"*/}
-                        {/*style={style.leftHalf}*/}
-                        {/*playSoundOnCapture*/}
-                        {/*onTextRecognized={({ textBlocks }: ITextRecognizedResponse) => this.processRecognizedText(textBlocks)}*/}
-                    {/*>*/}
-                        {/*{({ camera, status }: IRNCameraRender) => {*/}
-                            {/*if (status !== "READY") {*/}
-                                {/*return null;*/}
-                            {/*}*/}
-                            {/*return (*/}
-                                {/*<View style={style.buttonContainer}>*/}
-                                    {/*<TouchableOpacity*/}
-                                        {/*onPress={() => this.takePicture(camera)}*/}
-                                        {/*style={style.button}*/}
-                                    {/*/>*/}
-                                {/*</View>*/}
-                            {/*);*/}
-                        {/*}}*/}
-                    {/*</Camera>*/}
-                    <View style={style.leftHalf}>
-                        <Text>This is the left half -- let's see it</Text>
-                    </View>
+                    <Camera
+                        ref={(cam: Camera) => { this.camera = cam; }}
+                        key="camera"
+                        style={style.leftHalf}
+                        playSoundOnCapture
+                        onTextRecognized={({ textBlocks }: ITextRecognizedResponse) => this.state.capture && this.processRecognizedText(textBlocks)}
+                    >
+                        {({ camera, status }: IRNCameraRender) => {
+                            if (status !== "READY") {
+                                return null;
+                            }
+                            return (
+                                <View style={style.buttonContainer}>
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({capture: !this.state.capture})}
+                                        style={[style.button, {backgroundColor:this.state.capture ? 'green' : 'white'}]}
+                                    />
+                                </View>
+                            );
+                        }}
+                    </Camera>
+                    {/*<View style={style.leftHalf}>*/}
+                        {/*<Text>This is the left half -- let's see it</Text>*/}
+                    {/*</View>*/}
                     <View style={style.rightHalf}>
-                        <Text>This is the right half -- no really</Text>
-                        {/*{this.state.receipt && <Receipt receipt={this.state.receipt}/>}*/}
+                        {/*<Text>This is the right half -- no really</Text>*/}
+                        {this.state.receipt && <Receipt receipt={this.state.receipt}/>}
                     </View>
                     </>
                 ) : null}

@@ -13,14 +13,14 @@ export default class Receipt extends React.Component<IProps> {
             <View>
                 {!receipt ? (<Text>No Receipt</Text>) : (
                     <View>
-                        <Text>{receipt.location}</Text>
-                        <FlatList data={receipt.items} renderItem={({item}: {item: IReceiptItem}) => (
+                        <Text style={{fontSize:20,fontWeight:'bold'}}>{receipt.location}</Text>
+                        <FlatList data={receipt.items} keyExtractor={(item, index) => index.toString()} renderItem={({item}: {item: IReceiptItem}) => (
                             <>
-                            <Text>{item.name}</Text>
-                                <Text>{item.total}</Text>
+                                <Text style={{alignSelf:'flex-start'}}>{item.text}</Text>
+                                <Text style={{alignSelf:'flex-end'}}>{item.total}</Text>
                             </>
                         )}/>
-                        <Text>TOTAL: {receipt.total}</Text>
+                        <Text style={{fontWeight:'bold',alignSelf:'flex-end'}}>TOTAL: {receipt.total}</Text>
                     </View>
                 )}
 

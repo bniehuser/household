@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     },
     camera: {
         position: "absolute",
-        width: Dimensions.screenWidth/2,
+        width: Dimensions.screenWidth/3,
         height: Dimensions.screenHeight,
         alignItems: "center",
         alignSelf: "center",
@@ -27,17 +27,15 @@ const styles = StyleSheet.create({
         flex: 1
     },
     leftHalf: {
-        width: Dimensions.screenWidth/2,
+        width: Dimensions.screenWidth/3,
         height: Dimensions.screenHeight,
         alignItems: "center",
         alignSelf: "flex-start",
         justifyContent: "center",
         flex: 1,
-        backgroundColor: 'black',
-        color: 'white'
     },
     rightHalf: {
-        width: Dimensions.screenWidth/2,
+        width: Dimensions.screenWidth/3,
         height: Dimensions.screenHeight,
         alignItems: "center",
         alignSelf: "flex-end",
